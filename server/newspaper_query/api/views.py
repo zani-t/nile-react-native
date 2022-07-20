@@ -11,6 +11,9 @@ def query(request):
     if request.method == 'POST':
         url = ast.literal_eval(request.body.decode("utf-8")).get('url', 'NULL_URL')
 
+        if url == 'NULL_URL':
+            return JsonResponse({'response', url})
+
         new_article = Article(url)
         new_article.download()
         new_article.parse()
