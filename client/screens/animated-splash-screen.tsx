@@ -55,7 +55,6 @@ const AnimatedSplashScreen: React.FC<SplashScreenProp> = ({ navigation }) => {
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 set_animation_triggered(true);
                 await new Promise(resolve => setTimeout(resolve, 500));
-                console.log('Beginning navigation to Auth');
                 navigation.navigate('Auth', { SHARED_ELEMENT_ID: 0 });
             }
         }
