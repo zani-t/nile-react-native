@@ -1,10 +1,13 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { useEffect } from 'react'
+import { Text, TextInput, View, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState } from 'react'
 
+import { StatusBar } from 'expo-status-bar';
+import Animated from 'react-native-reanimated';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 import { RootStackParamList } from './../components/root-stack-param-list'
+import { styles } from './../styles/auth-stylesheet';
 
 interface AuthScreenProp {
     navigation: StackNavigationProp<RootStackParamList, 'Auth'>
@@ -13,16 +16,58 @@ interface AuthScreenProp {
 
 const AuthScreen: React.FC<AuthScreenProp> = ({ navigation, route }) => {
 
-    const { id } = route.params;
-    console.log(id);
+    const { SHARED_ELEMENT_ID } = route.params;
+
+    // states
+    const [email, set_email] = useState('');
+    const [password, set_password] = useState('');
+
+    // state/type - when triggered hide header and change height of panel via animation
+    const [keyboard_focused, set_keyboard_focused] = useState(false);
+
+    // animation values
+
+    // functions
+    const trigger_keyboard_focused = () => {
+        set_keyboard_focused(!keyboard_focused);
+    }; // any way to correctly type check and remove this function?
 
     return (
-        <View>
-            <Text>auth-screen</Text>
-        </View>
-    )
-}
+        <Animated.View style={styles.view_container}>
+            <View style={styles.view_above_panel}>
+                <Animated.Text style={styles.text_header}>YW</Animated.Text>
+            </View>
+            <Animated.View style={styles.view_panel}>
+                <TextInput
+                    style={styles.text_input_auth}
+                    autoCapitalize="none"
+                    keyboardType="email-address"
+                    placeholderTextColor='#c7d8d4'
+                    placeholder=" Email..."
+                    onFocus={trigger_keyboard_focused}
+                    onChangeText={current_text => set_email(current_text)}
+                    value={email} />
+                <TextInput
+                    style={styles.text_input_auth}
+                    autoCapitalize="none"
+                    placeholderTextColor="#c7d8d4"
+                    placeholder=" Password..."
+                    onChangeText={current_text => set_password(current_text)}
+                    value={password}
+                    secureTextEntry />
+                <View style={styles.view_button_container}>
+                    <TouchableOpacity>
+                        <Text style={styles.text_button}>SIGN IN </Text>
+                    </TouchableOpacity>
+                    <Text style={styles.text_button}> / </Text>
+                    <TouchableOpacity>
+                        <Text style={styles.text_button}> REGISTER</Text>
+                    </TouchableOpacity>
+                </View>
+            </Animated.View>
+            <StatusBar style="light" />
+        </Animated.View>
+    );
+};
 
-export default AuthScreen
-
-const styles = StyleSheet.create({})
+export default AuthScreen;

@@ -3,9 +3,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
-import { RouteProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import Animated, { useDerivedValue, withTiming, useAnimatedStyle, interpolateColor } from 'react-native-reanimated';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 import { RootStackParamList } from './../components/root-stack-param-list'
 
@@ -57,7 +56,7 @@ const AnimatedSplashScreen: React.FC<SplashScreenProp> = ({ navigation }) => {
                 set_animation_triggered(true);
                 await new Promise(resolve => setTimeout(resolve, 500));
                 console.log('Beginning navigation to Auth');
-                navigation.navigate('Auth', { id: 0 });
+                navigation.navigate('Auth', { SHARED_ELEMENT_ID: 0 });
             }
         }
     }, [loading_finished]);
