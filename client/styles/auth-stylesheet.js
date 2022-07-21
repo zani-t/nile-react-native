@@ -13,10 +13,14 @@ export const styles = StyleSheet.create({
     view_panel: {
         height: '48%',
         paddingTop: '13%',
-        alignItems: 'center',
         backgroundColor: '#003c32',
         borderTopLeftRadius: 12,
         borderTopRightRadius: 12,
+    },
+    view_panel_content: {
+        height: '100%',
+        width: '100%',
+        alignItems: 'center',
     },
     view_button_container: {
         flexDirection: 'row',

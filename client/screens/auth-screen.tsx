@@ -1,8 +1,8 @@
 import { Text, TextInput, View, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import { StatusBar } from 'expo-status-bar';
-import Animated from 'react-native-reanimated';
+import Animated, { FadeIn, FadeOut, SlideInDown, SlideOutDown } from 'react-native-reanimated';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
@@ -35,35 +35,41 @@ const AuthScreen: React.FC<AuthScreenProp> = ({ navigation, route }) => {
     return (
         <Animated.View style={styles.view_container}>
             <View style={styles.view_above_panel}>
-                <Animated.Text style={styles.text_header}>YW</Animated.Text>
+                <Animated.Text style={styles.text_header}
+                    entering={FadeIn.delay(750)}
+                    exiting={FadeOut}>YW</Animated.Text>
             </View>
-            <Animated.View style={styles.view_panel}>
-                <TextInput
-                    style={styles.text_input_auth}
-                    autoCapitalize="none"
-                    keyboardType="email-address"
-                    placeholderTextColor='#c7d8d4'
-                    placeholder=" Email..."
-                    onFocus={trigger_keyboard_focused}
-                    onChangeText={current_text => set_email(current_text)}
-                    value={email} />
-                <TextInput
-                    style={styles.text_input_auth}
-                    autoCapitalize="none"
-                    placeholderTextColor="#c7d8d4"
-                    placeholder=" Password..."
-                    onChangeText={current_text => set_password(current_text)}
-                    value={password}
-                    secureTextEntry />
-                <View style={styles.view_button_container}>
-                    <TouchableOpacity>
-                        <Text style={styles.text_button}>SIGN IN </Text>
-                    </TouchableOpacity>
-                    <Text style={styles.text_button}> / </Text>
-                    <TouchableOpacity>
-                        <Text style={styles.text_button}> REGISTER</Text>
-                    </TouchableOpacity>
-                </View>
+            <Animated.View style={styles.view_panel}
+                entering={SlideInDown.duration(1000)}
+                exiting={SlideOutDown.duration(1000).delay(750)}>
+                <Animated.View style={styles.view_panel_content}
+                    entering={FadeIn.delay(750)}
+                    exiting={FadeOut}>
+                    <TextInput style={styles.text_input_auth}
+                        autoCapitalize="none"
+                        keyboardType="email-address"
+                        placeholderTextColor='#c7d8d4'
+                        placeholder=" Email . . ."
+                        onFocus={trigger_keyboard_focused}
+                        onChangeText={current_text => set_email(current_text)}
+                        value={email} />
+                    <TextInput style={styles.text_input_auth}
+                        autoCapitalize="none"
+                        placeholderTextColor="#c7d8d4"
+                        placeholder=" Password . . ."
+                        onChangeText={current_text => set_password(current_text)}
+                        value={password}
+                        secureTextEntry />
+                    <View style={styles.view_button_container}>
+                        <TouchableOpacity onPress={() => {navigation.navigate('Home', { SHARED_ELEMENT_ID: 1 })}}>
+                            <Text style={styles.text_button}>SIGN IN </Text>
+                        </TouchableOpacity>
+                        <Text style={styles.text_button}> / </Text>
+                        <TouchableOpacity>
+                            <Text style={styles.text_button}> REGISTER</Text>
+                        </TouchableOpacity>
+                    </View>
+                </Animated.View>
             </Animated.View>
             <StatusBar style="light" />
         </Animated.View>
