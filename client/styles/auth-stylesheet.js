@@ -6,13 +6,13 @@ export const styles = StyleSheet.create({
         backgroundColor: '#004b3e',
     },
     view_above_panel: {
-        height: '52%',
+        height: '55%',
         paddingTop: '5%',
         justifyContent: 'center',
     },
     view_panel: {
-        height: '48%',
-        paddingTop: '13%',
+        height: '45%',
+        paddingTop: '12%',
         backgroundColor: '#003c32',
         borderTopLeftRadius: 12,
         borderTopRightRadius: 12,

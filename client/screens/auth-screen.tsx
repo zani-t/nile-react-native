@@ -34,11 +34,11 @@ const AuthScreen: React.FC<AuthScreenProp> = ({ navigation, route }) => {
 
     return (
         <Animated.View style={styles.view_container}>
-            <View style={styles.view_above_panel}>
-                <Animated.Text style={styles.text_header}
-                    entering={FadeIn.delay(750)}
-                    exiting={FadeOut}>YW</Animated.Text>
-            </View>
+            <Animated.View style={styles.view_above_panel}
+                entering={FadeIn.delay(750)}
+                exiting={FadeOut}>
+                <Text style={styles.text_header}>YW</Text>
+            </Animated.View>
             <Animated.View style={styles.view_panel}
                 entering={SlideInDown.duration(1000)}
                 exiting={SlideOutDown.duration(1000).delay(750)}>
