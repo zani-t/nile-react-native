@@ -8,7 +8,7 @@ import Animated from 'react-native-reanimated';
 import { RootStackParamList } from './../components/root-stack-param-list'
 import { styles, title_props, version_props, acknowledgement_props } from './../styles/home-stylesheet';
 
-type headline = 'stored' | 'queried';
+type headline_type = 'stored' | 'queried';
 
 interface HomeScreenProp {
     navigation: StackNavigationProp<RootStackParamList, 'Home'>
@@ -17,11 +17,19 @@ interface HomeScreenProp {
 
 const HomeScreen: React.FC<HomeScreenProp> = ({ navigation, route }) => {
 
+    // when search attempted - request data from n3k
+    // when data successfully received - switch theme to queried
+    // run animation & fade
+    // display headline in panel with queried info
+
+    // rerequest info in queried state
+    // set/add new category
+
     const { SHARED_ELEMENT_ID } = route.params;
     const PLACEHOLDER_IMG = require('./../assets/placeholder.png');
 
     // states
-    const [displayed_headline, set_displayed_headline] = useState<headline>('stored');
+    const [displayed_headline, set_displayed_headline] = useState<headline_type>('stored');
 
     return (
         <Animated.View style={styles().view_container}>
