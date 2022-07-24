@@ -1,22 +1,19 @@
-import { StyleSheet, Text, View, ViewStyle } from 'react-native'
-import React from 'react'
+import { ViewStyle } from 'react-native';
+import React from 'react';
 
-interface TopComponentProps {
+import Animated from 'react-native-reanimated';
+
+interface TopPanelProps {
     style: ViewStyle[];
     children: any
 };
 
-const TopPanel: React.FC<TopComponentProps> = (props: TopComponentProps) => {
-
-
-
+const TopPanel: React.FC<TopPanelProps> = (props: TopPanelProps) => {
     return (
-        <View style={props.style}>
+        <Animated.View style={props.style}>
             {props.children}
-        </View>
+        </Animated.View>
     );
 };
 
 export default TopPanel;
-
-const styles = StyleSheet.create({})

@@ -6,30 +6,49 @@ import Animated from 'react-native-reanimated';
 import { app_styles,
     view_container_animated_styles,
     view_top_animated_styles,
+    view_top_conditional_styles,
 } from './styles/app-stylesheet';
-import SplashImage from './components/SplashImage';
+
 import TopPanel from './components/TopPanel';
+import SplashImage from './components/SplashImage';
+import HeaderLarge from './components/HeaderLarge';
 
 export type AppState = 'SPLASH' | 'AUTH' | 'HOME' | 'CONFIRM' | 'SORT';
 
 export default function App() {
 
-    // states
     const [appState, setAppState] = useState<AppState>('SPLASH');
 
     return (
+
         <Animated.View
             style={[app_styles.view_container,
             view_container_animated_styles({ appState: appState })]}>
-            <TopPanel style={[app_styles.view_panel_top,
-                view_top_animated_styles({ appState: appState })]}>
+            <TopPanel
+                style={[app_styles.view_panel_top,
+                view_top_animated_styles({ appState: appState }),
+                view_top_conditional_styles({ appState: appState })]}>
                 {appState === 'SPLASH' &&
                     <SplashImage appStateControl={setAppState} />}
+                {appState === 'AUTH' &&
+                    <HeaderLarge appStateControl={setAppState} />}
             </TopPanel>
             <StatusBar style="light" />
         </Animated.View>
+        
     );
+
 };
+
+
+
+
+
+
+
+
+
+
 
 /*
  * top panel - splash image, yw large, yw small, stored headline

@@ -11,10 +11,9 @@ interface SplashComponentProps {
 };
 
 const SplashImage: React.FC<SplashComponentProps> = (props: SplashComponentProps) => {
-
     const SPLASH_IMG = require("./../assets/hb-logo.png");
     
-    const [splashAnimationTriggered, setSplashAnimationTriggered] = useState(false);
+    const [componentDisplayed, setComponentDisplayed] = useState(true);
 
     useEffect(() => {
         async function load_fonts() {
@@ -39,8 +38,8 @@ const SplashImage: React.FC<SplashComponentProps> = (props: SplashComponentProps
                 console.log("useEffect load_fonts " + error);
             } finally {
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                setSplashAnimationTriggered(true);
-                await new Promise(resolve => setTimeout(resolve, 250));
+                setComponentDisplayed(false);
+                await new Promise(resolve => setTimeout(resolve, 500));
                 props.appStateControl('AUTH');
             }
         };
@@ -51,7 +50,7 @@ const SplashImage: React.FC<SplashComponentProps> = (props: SplashComponentProps
         <Animated.Image
             source={SPLASH_IMG}
             style={[splash_styles.image_splash,
-                image_splash_animated_styles({ splashAnimationTriggered: splashAnimationTriggered })]} />
+                image_splash_animated_styles({ componentDisplayed: componentDisplayed })]} />
     );
 };
 
