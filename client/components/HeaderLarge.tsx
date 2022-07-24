@@ -12,14 +12,15 @@ interface HeaderLargeComponentProps {
 const HeaderLarge: React.FC<HeaderLargeComponentProps> = (props: HeaderLargeComponentProps) => {
     const [componentDisplayed, setComponentDisplayed] = useState(false);
 
-    const closingSequence = () => {
-        
-    };
-
+    // opening sequence
     useState(async () => {
         await new Promise(resolve => setTimeout(resolve, 500));
         setComponentDisplayed(true)
     });
+
+    const closingSequence = () => {
+        
+    };
 
     return (
         <Animated.Text

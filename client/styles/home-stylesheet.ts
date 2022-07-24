@@ -1,63 +1,73 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
+import { useAnimatedStyle, useDerivedValue, withTiming, } from 'react-native-reanimated';
 
-type HomeStylesheetProps = {
-    font_size?: number;
-    offset_width?: number;
-    offset_height?: number;
-    shadow_radius?: number;
-}
+import Colors from "./colors";
 
-export const title_props: HomeStylesheetProps = {
-    font_size: 32,
-    offset_height: 3,
-    offset_width: 3,
-    shadow_radius: 4,
-}
-export const version_props: HomeStylesheetProps = {
-    font_size: 20,
-    offset_height: 2,
-    offset_width: 2,
-    shadow_radius: 2,
-}
-export const acknowledgement_props: HomeStylesheetProps = {
-    font_size: 10,
-    offset_height: 2,
-    offset_width: 2,
-    shadow_radius: 2,
+interface HomeStylesheetProps {
+    componentDisplayed: boolean;
 }
 
-export const styles = (props?: any) => StyleSheet.create({
-    view_container: {
-        flex: 1,
-        backgroundColor: '#004b3e',
-    },
-    view_header: {
+const DUR_MS = 750;
+const { height, width } = Dimensions.get('window');
+
+export const home_animated_styles = (props: HomeStylesheetProps) => {
+    const animation_value = useDerivedValue(() => {
+        return props.componentDisplayed === true ?
+            withTiming(1, { duration: DUR_MS }) : withTiming(0, { duration: DUR_MS });
+    }, [props]);
+    const animation_output = useAnimatedStyle(() => {
+        return {
+            opacity: animation_value.value,
+        };
+    });
+    return animation_output;
+};
+
+export const home_styles = StyleSheet.create({
+    view_header_small: {
         height: '18%',
-        paddingTop: '12%',
         paddingLeft: '5%',
     },
     view_header_inline: {
         flexDirection: 'row',
     },
+    view_button_container: {
+        flexDirection: 'row',
+        paddingTop: '5%',
+        paddingLeft: '7%',
+    },
 
     text_header: {
         marginLeft: '1%',
         fontFamily: 'Poppins-SemiBoldItalic',
-        fontSize: props?.font_size,
         textAlignVertical: 'center',
         textShadowColor: 'rgba(0, 0, 0, 0.2)',
-        textShadowOffset: { width: props?.offset_width, height: props?.offset_height },
-        textShadowRadius: props?.shadow_radius,
-        color: '#ffbb1a',
+        color: Colors.gold,
     },
-    text_header_title: {
+    text_header_topleft: {
         marginRight: '3%',
+        fontSize: 32,
+        textShadowOffset: { width: 3, height: 3 },
+        textShadowRadius: 4,
     },
-    text_header_version: {
+    text_header_topright: {
         paddingTop: '2%',
-        transform: [{ translateX: -4 }]
+        transform: [{ translateX: -4 }],
+        fontSize: 20,
+        textShadowOffset: { width: 2, height: 2 },
+        textShadowRadius: 2,
     },
-    text_header_acknowledgement: {
+    text_header_bottom: {
+        fontSize: 10,
+        textShadowOffset: { width: 2, height: 2 },
+        textShadowRadius: 2,
+        transform: [{ translateY: -7 }],
+    },
 
+    icon: {
+        marginRight: '6%'
+    },
+    icon_settings: {
+        transform: [{ translateY: -1 }],
     },
 });

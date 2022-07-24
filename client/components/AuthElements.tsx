@@ -48,9 +48,9 @@ const AuthElements: React.FC<AuthElementComponentProps> = (props: AuthElementCom
                 placeholderTextColor='#c7d8d4'
                 placeholder=" Password . . ."
                 // onfocus
+                secureTextEntry={true}
                 onChangeText={current_text => set_password(current_text)}
-                value={password}
-                secureTextEntry />
+                value={password} />
             <View style={auth_styles.view_button_container}>
                 <TouchableOpacity onPress={closingSequence}>
                     <Text style={auth_styles.text_button}>SIGN IN </Text>

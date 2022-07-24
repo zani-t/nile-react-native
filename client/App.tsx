@@ -14,11 +14,13 @@ import { app_styles,
 import TopPanel from './components/TopPanel';
 import SplashImage from './components/SplashImage';
 import HeaderLarge from './components/HeaderLarge';
+import HeaderSmall from './components/HeaderSmall';
 
 import BottomPanel from './components/BottomPanel';
 import AuthElements from './components/AuthElements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Text } from 'react-native';
+import PanelButtons from './components/PanelButtons';
 
 export type AppState = 'SPLASH' | 'AUTH' | 'HOME' | 'CONFIRM' | 'SORT';
 
@@ -39,6 +41,8 @@ export default function App() {
                     <SplashImage appStateControl={setAppState} />}
                 {appState === 'AUTH' &&
                     <HeaderLarge appStateControl={setAppState} />}
+                {appState === 'HOME' &&
+                    <HeaderSmall appStateControl={setAppState} />}
             </TopPanel>
             <BottomPanel
                 style={[app_styles.view_panel_bottom,
@@ -46,6 +50,8 @@ export default function App() {
                 view_bottom_conditional_styles({ appState: appState })]}>
                 {appState === 'AUTH' &&
                     <AuthElements appStateControl={setAppState} />}
+                {appState === 'HOME' &&
+                    <PanelButtons appStateControl={setAppState} />}
             </BottomPanel>
             <StatusBar style="light" />
         </Animated.View>
@@ -81,12 +87,12 @@ export default function App() {
 // categories - panel down, inner panel up, categories, articles
 
 // all components
-// splash image
+// *splash image
 
-// yw header 1
-// auth elements (email, password, buttons* - contact mongo)
+// *yw header 1
+// *auth elements (email, password, buttons* - contact mongo)
 
-// yw header 2
+// *yw header 2
 // stored headline (photo, text)* - go to web
 // panel buttons* - refresh[/contact mongo], log out, trigger categories
 // txt input* - contact django & trigger confirm stg 1 // set category, contact mongo, trigger home

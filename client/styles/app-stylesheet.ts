@@ -2,6 +2,7 @@ import { Dimensions, StyleSheet, ViewStyle } from "react-native";
 import { interpolate, interpolateColor, useAnimatedStyle, useDerivedValue, withTiming, } from 'react-native-reanimated';
 
 import { AppState } from '../App';
+import Colors from './colors';
 
 interface MainStylesheetProps {
     appState: AppState;
@@ -9,13 +10,6 @@ interface MainStylesheetProps {
 
 const DUR_MS = 750;
 const { height, width } = Dimensions.get('window');
-
-const view_container_colors = {
-    white: '#ffffff',
-    blue: '#1756f8',
-    green: '#004b3e',
-    dark_green: '#003c32',
-};
 
 const panel_heights = {
     splash: {
@@ -53,7 +47,7 @@ export const view_container_animated_styles = (props: MainStylesheetProps) => {
             backgroundColor: interpolateColor(
                 animation_value.value,
                 [0, 1],
-                [view_container_colors.blue, view_container_colors.green]
+                [Colors.blue, Colors.green]
             ),
         };
     });
@@ -130,10 +124,10 @@ export const view_bottom_animated_styles = (props: MainStylesheetProps) => {
             backgroundColor: interpolateColor(
                 animation_value.value,
                 [0, 1, 2, 3],
-                [view_container_colors.dark_green,
-                view_container_colors.dark_green,
-                view_container_colors.white,
-                view_container_colors.white]
+                [Colors.dark_green,
+                Colors.dark_green,
+                Colors.white,
+                Colors.white]
             )
         };
     });
