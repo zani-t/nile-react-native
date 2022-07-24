@@ -1,14 +1,10 @@
 import { StyleSheet } from "react-native";
 import { interpolateColor, useAnimatedStyle, useDerivedValue, withTiming, } from 'react-native-reanimated';
 
-import { ComponentState } from '../App';
+import { AppState } from '../App';
 
 interface MainStylesheetProps {
-    splashScreenDisplayed?: ComponentState;
-    authScreenDisplayed?: ComponentState;
-    homeStoredDisplayed?: ComponentState;
-    homeQueriedDisplayed?: ComponentState;
-    sortScreenDisplayed?: ComponentState;
+    appState: AppState;
 }
 
 const view_container_colors = {
@@ -16,9 +12,24 @@ const view_container_colors = {
     green: '#004b3e',
 };
 
+const panel_heights = {
+    splash: {
+        top: '100%',
+    },
+    auth: {
+        top: '55%',
+    },
+    home: {
+        top: '60%',
+    },
+    confirm_sort: {
+        top: '18%',
+    },
+}
+
 export const view_container_animated_styles = (props: MainStylesheetProps) => {
     const animation_value = useDerivedValue(() => {
-        return props.splashScreenDisplayed === 'OPEN' ? withTiming(0) : withTiming(1);
+        return props.appState === 'SPLASH' ? withTiming(0) : withTiming(1);
     }, [props]);
     const animation_output = useAnimatedStyle(() => {
         return {
@@ -32,14 +43,38 @@ export const view_container_animated_styles = (props: MainStylesheetProps) => {
     return animation_output;
 };
 
+export const view_top_animated_styles = (props: MainStylesheetProps) => {
+    const animation_value = useDerivedValue(() => {
+        switch (props.appState) {
+            case 'SPLASH':
+                return withTiming(panel_heights.splash.top);
+            case 'AUTH':
+                return withTiming(panel_heights.auth.top);
+            case 'HOME':
+                return withTiming(panel_heights.home.top);
+            default:
+                return withTiming(panel_heights.confirm_sort.top);
+        }
+    }, [props]);
+    const animation_output = useAnimatedStyle(() => {
+        return {
+            height: animation_value.value,
+        };
+    });
+    return animation_output;
+};
+
 export const app_styles = StyleSheet.create({
     view_container: {
         flex: 1,
     },
-    view_panel_inner: {
+    view_panel_top: {
+        width: '100%',
+    },
+    view_panel_center: {
 
     },
-    view_panel_outer: {
+    view_panel_bottom: {
 
     }
 });

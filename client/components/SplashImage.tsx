@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 
 import * as Font from 'expo-font';
-import Animated, { onChange } from 'react-native-reanimated'
+import Animated from 'react-native-reanimated';
 
-import { ComponentState } from '../App';
-import { splash_styles, image_splash_animated_styles } from '../styles/splash-stylesheet'
+import { AppState } from '../App';
+import { splash_styles, image_splash_animated_styles } from '../styles/splash-stylesheet';
 
 interface SplashComponentProps {
-    componentStateControl: React.Dispatch<React.SetStateAction<ComponentState>>;
-}
+    appStateControl: React.Dispatch<React.SetStateAction<AppState>>;
+};
 
 const SplashImage: React.FC<SplashComponentProps> = (props: SplashComponentProps) => {
 
@@ -41,9 +41,9 @@ const SplashImage: React.FC<SplashComponentProps> = (props: SplashComponentProps
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 setSplashAnimationTriggered(true);
                 await new Promise(resolve => setTimeout(resolve, 250));
-                props.componentStateControl('CLOSED');
+                props.appStateControl('AUTH');
             }
-        }
+        };
         load_fonts();
     }, []);
 
@@ -52,7 +52,7 @@ const SplashImage: React.FC<SplashComponentProps> = (props: SplashComponentProps
             source={SPLASH_IMG}
             style={[splash_styles.image_splash,
                 image_splash_animated_styles({ splashAnimationTriggered: splashAnimationTriggered })]} />
-    )
-}
+    );
+};
 
 export default SplashImage;
