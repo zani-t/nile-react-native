@@ -5,9 +5,12 @@ interface SplashStylesheetProps {
     componentDisplayed: boolean;
 }
 
+const DUR_MS = 750;
+
 export const image_splash_animated_styles = (props: SplashStylesheetProps) => {
     const animation_value = useDerivedValue(() => {
-        return props.componentDisplayed === true ? withTiming(1) : withTiming(0);
+        return props.componentDisplayed === true ?
+            withTiming(1, { duration: DUR_MS }) : withTiming(0, { duration: DUR_MS });
     }, [props]);
     const animation_output = useAnimatedStyle(() => {
         return {

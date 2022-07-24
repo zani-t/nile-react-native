@@ -1,23 +1,25 @@
 import { StyleSheet } from "react-native";
+import { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming, } from 'react-native-reanimated';
 
-export const styles = StyleSheet.create({
-    view_container: {
-        flex: 1,
-        backgroundColor: '#004b3e',
-    },
-    view_above_panel: {
-        height: '55%',
-        paddingTop: '5%',
-        justifyContent: 'center',
-    },
-    view_panel: {
-        height: '45%',
-        paddingTop: '12%',
-        backgroundColor: '#003c32',
-        borderTopLeftRadius: 12,
-        borderTopRightRadius: 12,
-    },
-    view_panel_content: {
+interface AuthStylesheetProps {
+    componentDisplayed: boolean;
+}
+
+// header not fading correctly?
+export const auth_animated_styles = (props: AuthStylesheetProps) => {
+    const animation_value = useDerivedValue(() => {
+        return props.componentDisplayed === true ? withTiming(1) : withTiming(0);
+    }, [props]);
+    const animation_output = useAnimatedStyle(() => {
+        return {
+            opacity: animation_value.value,
+        };
+    });
+    return animation_output;
+};
+
+export const auth_styles = StyleSheet.create({
+    view_auth_content: {
         height: '100%',
         width: '100%',
         alignItems: 'center',
@@ -54,6 +56,5 @@ export const styles = StyleSheet.create({
         textShadowOffset: { width: 2, height: 2 },
         textShadowRadius: 2,
         color: 'white',
-    }
-
+    },
 });

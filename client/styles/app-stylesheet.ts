@@ -7,11 +7,14 @@ interface MainStylesheetProps {
     appState: AppState;
 }
 
+const DUR_MS = 750;
 const { height, width } = Dimensions.get('window');
 
 const view_container_colors = {
+    white: '#ffffff',
     blue: '#1756f8',
     green: '#004b3e',
+    dark_green: '#003c32',
 };
 
 const panel_heights = {
@@ -23,15 +26,15 @@ const panel_heights = {
     },
     auth: {
         sharedValue: 1,
-        top: height * .55,
+        top: height * .52,
         center: height * .00,
-        bottom: height * .45,
+        bottom: height * .48,
     },
     home: {
         sharedValue: 2,
-        top: height * .60,
+        top: height * .58,
         center: height * .00,
-        bottom: height * .40,
+        bottom: height * .42,
     },
     confirm_sort: {
         sharedValue: 3,
@@ -63,11 +66,11 @@ export const view_top_animated_styles = (props: MainStylesheetProps) => {
             case 'SPLASH':
                 return panel_heights.splash.sharedValue;
             case 'AUTH':
-                return withTiming(panel_heights.auth.sharedValue);
+                return withTiming(panel_heights.auth.sharedValue, { duration: DUR_MS });
             case 'HOME':
-                return withTiming(panel_heights.home.sharedValue);
+                return withTiming(panel_heights.home.sharedValue, { duration: DUR_MS });
             default:
-                return withTiming(panel_heights.confirm_sort.sharedValue);
+                return withTiming(panel_heights.confirm_sort.sharedValue, { duration: DUR_MS });
         }
     }, [props]);
 
@@ -89,12 +92,61 @@ export const view_top_animated_styles = (props: MainStylesheetProps) => {
 };
 
 export const view_top_conditional_styles = (props: MainStylesheetProps) => {
-    var output: ViewStyle = { justifyContent: 'flex-start' };
+    var conditionalStyle: ViewStyle = { };
     switch (props.appState) {
         case 'AUTH':
-            output.justifyContent = 'center';
+            conditionalStyle.justifyContent = 'center';
         default:
-            return output;
+            return conditionalStyle;
+    }
+};
+
+export const view_bottom_animated_styles = (props: MainStylesheetProps) => {
+    const animation_value = useDerivedValue(() => {
+        switch (props.appState) {
+            case 'SPLASH':
+                return panel_heights.splash.sharedValue;
+            case 'AUTH':
+                return withTiming(panel_heights.auth.sharedValue, { duration: DUR_MS });
+            case 'HOME':
+                return withTiming(panel_heights.home.sharedValue, { duration: DUR_MS });
+            default:
+                return withTiming(panel_heights.confirm_sort.sharedValue, { duration: DUR_MS });
+        }
+    }, [props]);
+
+    const animation_output = useAnimatedStyle(() => {
+        return {
+            height: interpolate(
+                animation_value.value,
+                [panel_heights.splash.sharedValue,
+                panel_heights.auth.sharedValue,
+                panel_heights.home.sharedValue,
+                panel_heights.confirm_sort.sharedValue],
+                [panel_heights.splash.bottom,
+                panel_heights.auth.bottom,
+                panel_heights.home.bottom,
+                panel_heights.confirm_sort.bottom]),
+            backgroundColor: interpolateColor(
+                animation_value.value,
+                [0, 1, 2, 3],
+                [view_container_colors.dark_green,
+                view_container_colors.dark_green,
+                view_container_colors.white,
+                view_container_colors.white]
+            )
+        };
+    });
+    return animation_output;
+};
+
+export const view_bottom_conditional_styles = (props: MainStylesheetProps) => {
+    var conditionalStyle: ViewStyle = { };
+    switch (props.appState) {
+        case 'AUTH':
+            conditionalStyle.paddingTop = '12%';
+        default:
+            return conditionalStyle;
     }
 };
 
@@ -104,12 +156,13 @@ export const app_styles = StyleSheet.create({
     },
     view_panel_top: {
         width: '100%',
-        paddingTop: '12%',
+        marginTop: '12%',
     },
     view_panel_center: {
         backgroundColor: 'blue',
     },
     view_panel_bottom: {
-        backgroundColor: 'purple',
+        borderTopLeftRadius: 12,
+        borderTopRightRadius: 12,
     }
 });

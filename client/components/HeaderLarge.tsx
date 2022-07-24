@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Animated from "react-native-reanimated";
 
 import { AppState } from '../App';
-import { auth_styles, text_header_animated_styles } from './../styles/auth-style'
+import { auth_styles, auth_animated_styles } from '../styles/auth-stylesheet'
 
 interface HeaderLargeComponentProps {
     appStateControl: React.Dispatch<React.SetStateAction<AppState>>;
@@ -24,7 +24,7 @@ const HeaderLarge: React.FC<HeaderLargeComponentProps> = (props: HeaderLargeComp
     return (
         <Animated.Text
             style={[auth_styles.text_header,
-                text_header_animated_styles({ componentDisplayed: componentDisplayed })]}>
+                auth_animated_styles({ componentDisplayed: componentDisplayed })]}>
                     YW</Animated.Text>
     );
 };

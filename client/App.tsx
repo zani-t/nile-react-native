@@ -7,11 +7,18 @@ import { app_styles,
     view_container_animated_styles,
     view_top_animated_styles,
     view_top_conditional_styles,
+    view_bottom_animated_styles,
+    view_bottom_conditional_styles,
 } from './styles/app-stylesheet';
 
 import TopPanel from './components/TopPanel';
 import SplashImage from './components/SplashImage';
 import HeaderLarge from './components/HeaderLarge';
+
+import BottomPanel from './components/BottomPanel';
+import AuthElements from './components/AuthElements';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Text } from 'react-native';
 
 export type AppState = 'SPLASH' | 'AUTH' | 'HOME' | 'CONFIRM' | 'SORT';
 
@@ -33,6 +40,13 @@ export default function App() {
                 {appState === 'AUTH' &&
                     <HeaderLarge appStateControl={setAppState} />}
             </TopPanel>
+            <BottomPanel
+                style={[app_styles.view_panel_bottom,
+                view_bottom_animated_styles({ appState: appState }),
+                view_bottom_conditional_styles({ appState: appState })]}>
+                {appState === 'AUTH' &&
+                    <AuthElements appStateControl={setAppState} />}
+            </BottomPanel>
             <StatusBar style="light" />
         </Animated.View>
         
