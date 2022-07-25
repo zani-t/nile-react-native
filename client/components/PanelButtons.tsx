@@ -6,7 +6,8 @@ import Animated from "react-native-reanimated";
 
 import { AppState } from '../App';
 import Colors from "../styles/colors";
-import { home_styles, home_animated_styles } from '../styles/home-stylesheet'
+import { home_styles, home_animated_styles } from '../styles/home-stylesheet';
+
 
 interface PanelButtonComponentProps {
     appStateControl: React.Dispatch<React.SetStateAction<AppState>>;

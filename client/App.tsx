@@ -18,9 +18,8 @@ import HeaderSmall from './components/HeaderSmall';
 
 import BottomPanel from './components/BottomPanel';
 import AuthElements from './components/AuthElements';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Text } from 'react-native';
 import PanelButtons from './components/PanelButtons';
+import LinkInput from './components/LinkInput';
 
 export type AppState = 'SPLASH' | 'AUTH' | 'HOME' | 'CONFIRM' | 'SORT';
 
@@ -51,7 +50,8 @@ export default function App() {
                 {appState === 'AUTH' &&
                     <AuthElements appStateControl={setAppState} />}
                 {appState === 'HOME' &&
-                    <PanelButtons appStateControl={setAppState} />}
+                    <><PanelButtons appStateControl={setAppState} />
+                    <LinkInput appStateControl={setAppState} /></>}
             </BottomPanel>
             <StatusBar style="light" />
         </Animated.View>

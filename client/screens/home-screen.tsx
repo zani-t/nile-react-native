@@ -6,7 +6,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import Animated from 'react-native-reanimated';
 
 import { RootStackParamList } from './../components/root-stack-param-list'
-import { styles, title_props, version_props, acknowledgement_props } from './../styles/home-stylesheet';
+import { styles, title_props, version_props, acknowledgement_props } from '../styles/home-styles';
 
 type headline_type = 'stored' | 'queried';
 

@@ -36,6 +36,18 @@ export const home_styles = StyleSheet.create({
         paddingTop: '5%',
         paddingLeft: '7%',
     },
+    view_link_container: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginHorizontal: '6%',
+        marginTop: '6%',
+        marginBottom: '2%',
+        paddingHorizontal: '4%',
+        height: '13%',
+        width: '88%',
+        borderRadius: 10,
+        backgroundColor: '#eeeeee',
+    },
 
     text_header: {
         marginLeft: '1%',
@@ -64,10 +76,23 @@ export const home_styles = StyleSheet.create({
         transform: [{ translateY: -7 }],
     },
 
+    text_input_link: {
+        width: '100%',
+        fontSize: 15,
+        textShadowColor: 'rgba(0, 0, 0, 0.3)',
+        textShadowOffset: { width: 2, height: 2 },
+        textShadowRadius: 2,
+        color: '#b7b7b7',
+    },
+
     icon: {
         marginRight: '6%'
     },
     icon_settings: {
         transform: [{ translateY: -1 }],
+    },
+    icon_enter_link: {
+        justifyContent: 'center',
+        transform: [{ translateX: -18 }],
     },
 });
