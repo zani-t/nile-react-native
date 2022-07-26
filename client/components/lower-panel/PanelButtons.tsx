@@ -4,9 +4,9 @@ import { TouchableOpacity } from "react-native";
 import { FontAwesome, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import Animated from "react-native-reanimated";
 
-import Colors from "../styles/colors";
-import { AppState, AppDisplay } from '../App';
-import { home_styles, home_animated_styles } from '../styles/home-stylesheet';
+import Colors from "../../styles/colors";
+import { AppState, AppDisplay } from '../../App';
+import { home_styles, home_animated_styles } from '../../styles/home-stylesheet';
 
 interface PanelButtonComponentProps {
     appStateController: React.Dispatch<React.SetStateAction<AppState>>;

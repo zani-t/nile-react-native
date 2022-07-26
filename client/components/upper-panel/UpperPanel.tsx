@@ -3,12 +3,12 @@ import React from 'react';
 
 import Animated from 'react-native-reanimated';
 
-interface BottomPanelProps {
+interface UpperPanelProps {
     style: ViewStyle[];
-    children: any;
+    children: React.ReactNode;
 };
 
-const BottomPanel: React.FC<BottomPanelProps> = (props: BottomPanelProps) => {
+const UpperPanel: React.FC<UpperPanelProps> = (props: UpperPanelProps) => {
     return (
         <Animated.View style={props.style}>
             {props.children}
@@ -16,4 +16,4 @@ const BottomPanel: React.FC<BottomPanelProps> = (props: BottomPanelProps) => {
     );
 };
 
-export default BottomPanel;
+export default UpperPanel;

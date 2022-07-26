@@ -4,8 +4,8 @@ import { TextInput, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Animated from "react-native-reanimated";
 
-import { AppState, AppDisplay } from '../App';
-import { home_styles, home_animated_styles } from '../styles/home-stylesheet';
+import { AppState, AppDisplay } from '../../App';
+import { home_styles, home_animated_styles } from '../../styles/home-stylesheet';
 
 interface LinkInputComponentProps {
     appStateController: React.Dispatch<React.SetStateAction<AppState>>;

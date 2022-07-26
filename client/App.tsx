@@ -6,25 +6,25 @@ import Animated from 'react-native-reanimated';
 import {
     app_styles,
     view_container_animated_styles,
-    view_top_animated_styles,
-    view_top_conditional_styles,
-    view_bottom_animated_styles,
-    view_bottom_conditional_styles,
+    view_upper_animated_styles,
+    view_upper_conditional_styles,
+    view_lower_animated_styles,
+    view_lower_conditional_styles,
 } from './styles/app-stylesheet';
 
-import TopPanel from './components/TopPanel';
+import UpperPanel from './components/upper-panel/UpperPanel';
 import SplashImage from './components/SplashImage';
-import HeaderLarge from './components/HeaderLarge';
-import HeaderSmall from './components/HeaderSmall';
+import HeaderLarge from './components/upper-panel/HeaderLarge';
+import HeaderSmall from './components/upper-panel/HeaderSmall';
 
-import BottomPanel from './components/BottomPanel';
-import AuthElements from './components/AuthElements';
-import PanelButtons from './components/PanelButtons';
-import LinkInput from './components/LinkInput';
+import LowerPanel from './components/lower-panel/LowerPanel';
+import AuthElements from './components/lower-panel/AuthElements';
+import PanelButtons from './components/lower-panel/PanelButtons';
+import LinkInput from './components/lower-panel/LinkInput';
 
+export type AppState = 'SPLASH' | 'AUTH'| 'HOME' | 'CONFIRM' | 'SORT';
+export type KeyboardState = 'OFF' | 'TRANSITION' | 'AUTH' | 'LINK'
 export type LinkInputDisplay = 'DEFAULT' | 'BAD_LINK' | 'CONFIRM'
-
-export type AppState = 'SPLASH' | 'AUTH' | 'HOME' | 'CONFIRM' | 'SORT';
 export type AppDisplay = {
     HeaderLarge: boolean;
     HeaderSmall: boolean;
@@ -37,6 +37,7 @@ export type AppDisplay = {
 export default function App() {
 
     const [appState, setAppState] = useState<AppState>('SPLASH');
+    const [keyboardState, setKeyboardState] = useState<KeyboardState>('OFF');
     const [appDisplay, setAppDisplay] = useState<AppDisplay>({
         HeaderLarge: false,
         HeaderSmall: false,
@@ -51,36 +52,41 @@ export default function App() {
         <Animated.View
             style={[app_styles.view_container,
             view_container_animated_styles({ appState: appState })]}>
-            <TopPanel
-                style={[app_styles.view_panel_top,
-                view_top_animated_styles({ appState: appState }),
-                view_top_conditional_styles({ appState: appState })]}>
+            <UpperPanel
+                style={[app_styles.view_panel_upper,
+                view_upper_animated_styles({
+                    appState: appState,
+                    keyboardState: keyboardState,
+                }),
+                view_upper_conditional_styles({ appState: appState })]}>
 
                 {appState === 'SPLASH' &&
                     <SplashImage appStateControl={setAppState} />}
                 {appState === 'AUTH' &&
                     <HeaderLarge appDisplayControl={appDisplay} />}
                 {appState === 'HOME' &&
-                    <HeaderSmall appDisplayControl={appDisplay}
-                        /* appDisplayController={setAppDisplay} */ />}
+                    <HeaderSmall appDisplayControl={appDisplay} />}
 
-            </TopPanel>
+            </UpperPanel>
             
             {
             // panelbuttons calls appdisplaycontroller to display components
-            
             }
 
-            <BottomPanel
-                style={[app_styles.view_panel_bottom,
-                view_bottom_animated_styles({ appState: appState }),
-                view_bottom_conditional_styles({ appState: appState })]}>
+            <LowerPanel
+                style={[app_styles.view_panel_lower,
+                view_lower_animated_styles({
+                    appState: appState,
+                    keyboardState: keyboardState,
+                }),
+                view_lower_conditional_styles({ appState: appState })]}>
 
                 {appState === 'AUTH' &&
                     <AuthElements
                         appStateController={setAppState}
                         appDisplayControl={appDisplay}
-                        appDisplayController={setAppDisplay} />}
+                        appDisplayController={setAppDisplay}
+                        keyboardStateController={setKeyboardState}/>}
                 {appState === 'HOME' &&
                     <>
                         <PanelButtons
@@ -93,7 +99,7 @@ export default function App() {
                             appDisplayController={setAppDisplay} />
                     </>}
 
-            </BottomPanel>
+            </LowerPanel>
             <StatusBar style="light" />
         </Animated.View>
 

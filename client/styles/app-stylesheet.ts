@@ -1,11 +1,12 @@
 import { Dimensions, StyleSheet, ViewStyle } from "react-native";
 import { interpolate, interpolateColor, useAnimatedStyle, useDerivedValue, withTiming, } from 'react-native-reanimated';
 
-import { AppState } from '../App';
+import { AppState, KeyboardState } from '../App';
 import Colors from './colors';
 
 interface MainStylesheetProps {
     appState: AppState;
+    keyboardState?: KeyboardState;
 }
 
 const DUR_MS = 750;
@@ -14,28 +15,35 @@ const { height, width } = Dimensions.get('window');
 const panel_heights = {
     splash: {
         sharedValue: 0,
-        top: height * 1.00,
+        upper: height * 1.00,
         center: height * .00,
-        bottom: height * .00,
+        lower: height * .00,
     },
     auth: {
         sharedValue: 1,
-        top: height * .52,
+        upper: height * .52,
         center: height * .00,
-        bottom: height * .48,
+        lower: height * .48,
     },
     home: {
         sharedValue: 2,
-        top: height * .58,
+        upper: height * .58,
         center: height * .00,
-        bottom: height * .42,
+        lower: height * .42,
     },
     confirm_sort: {
         sharedValue: 3,
-        top: height * .18,
+        upper: height * .18,
         center: height * .27,
-        bottom: height * .55,
+        lower: height * .55,
     },
+
+    key_auth: {
+        sharedValue: 0,
+        upper: height * .20,
+        center: height * .00,
+        lower: height * .78,
+    }
 }
 
 export const view_container_animated_styles = (props: MainStylesheetProps) => {
@@ -54,13 +62,18 @@ export const view_container_animated_styles = (props: MainStylesheetProps) => {
     return animation_output;
 };
 
-export const view_top_animated_styles = (props: MainStylesheetProps) => {
+export const view_upper_animated_styles = (props: MainStylesheetProps) => {
     const animation_value = useDerivedValue(() => {
         switch (props.appState) {
             case 'SPLASH':
                 return panel_heights.splash.sharedValue;
             case 'AUTH':
-                return withTiming(panel_heights.auth.sharedValue, { duration: DUR_MS });
+                switch (props.keyboardState) {
+                    case 'AUTH':
+                        return withTiming(panel_heights.key_auth.sharedValue, { duration: DUR_MS });
+                    default:
+                        return withTiming(panel_heights.auth.sharedValue, { duration: DUR_MS });
+                }
             case 'HOME':
                 return withTiming(panel_heights.home.sharedValue, { duration: DUR_MS });
             default:
@@ -69,24 +82,32 @@ export const view_top_animated_styles = (props: MainStylesheetProps) => {
     }, [props]);
 
     const animation_output = useAnimatedStyle(() => {
-        return {
+        return props.keyboardState === 'OFF' ? {
             height: interpolate(
                 animation_value.value,
                 [panel_heights.splash.sharedValue,
                 panel_heights.auth.sharedValue,
                 panel_heights.home.sharedValue,
                 panel_heights.confirm_sort.sharedValue],
-                [panel_heights.splash.top,
-                panel_heights.auth.top,
-                panel_heights.home.top,
-                panel_heights.confirm_sort.top]),
-        };
+                [panel_heights.splash.upper,
+                panel_heights.auth.upper,
+                panel_heights.home.upper,
+                panel_heights.confirm_sort.upper]),
+        } : {
+            height: interpolate(
+                animation_value.value,
+                [panel_heights.key_auth.sharedValue,
+                panel_heights.auth.sharedValue],
+                [panel_heights.key_auth.upper,
+                panel_heights.auth.upper]
+            ),
+        }
     });
     return animation_output;
 };
 
-export const view_top_conditional_styles = (props: MainStylesheetProps) => {
-    var conditionalStyle: ViewStyle = { };
+export const view_upper_conditional_styles = (props: MainStylesheetProps) => {
+    var conditionalStyle: ViewStyle = {};
     switch (props.appState) {
         case 'SPLASH':
             conditionalStyle.marginTop = '5%';
@@ -98,13 +119,18 @@ export const view_top_conditional_styles = (props: MainStylesheetProps) => {
     return conditionalStyle;
 };
 
-export const view_bottom_animated_styles = (props: MainStylesheetProps) => {
+export const view_lower_animated_styles = (props: MainStylesheetProps) => {
     const animation_value = useDerivedValue(() => {
         switch (props.appState) {
             case 'SPLASH':
                 return panel_heights.splash.sharedValue;
             case 'AUTH':
-                return withTiming(panel_heights.auth.sharedValue, { duration: DUR_MS });
+                switch (props.keyboardState) {
+                    case 'AUTH':
+                        return withTiming(panel_heights.key_auth.sharedValue, { duration: DUR_MS });
+                    default:
+                        return withTiming(panel_heights.auth.sharedValue, { duration: DUR_MS });
+                }
             case 'HOME':
                 return withTiming(panel_heights.home.sharedValue, { duration: DUR_MS });
             default:
@@ -113,17 +139,7 @@ export const view_bottom_animated_styles = (props: MainStylesheetProps) => {
     }, [props]);
 
     const animation_output = useAnimatedStyle(() => {
-        return {
-            height: interpolate(
-                animation_value.value,
-                [panel_heights.splash.sharedValue,
-                panel_heights.auth.sharedValue,
-                panel_heights.home.sharedValue,
-                panel_heights.confirm_sort.sharedValue],
-                [panel_heights.splash.bottom,
-                panel_heights.auth.bottom,
-                panel_heights.home.bottom,
-                panel_heights.confirm_sort.bottom]),
+        var final_value: ViewStyle = {
             backgroundColor: interpolateColor(
                 animation_value.value,
                 [0, 1, 2, 3],
@@ -132,13 +148,31 @@ export const view_bottom_animated_styles = (props: MainStylesheetProps) => {
                 Colors.white,
                 Colors.white]
             )
-        };
+        }
+        final_value.height = props.keyboardState === 'OFF' ?
+            interpolate(
+                animation_value.value,
+                [panel_heights.splash.sharedValue,
+                panel_heights.auth.sharedValue,
+                panel_heights.home.sharedValue,
+                panel_heights.confirm_sort.sharedValue],
+                [panel_heights.splash.lower,
+                panel_heights.auth.lower,
+                panel_heights.home.lower,
+                panel_heights.confirm_sort.lower]) :
+            interpolate(
+                animation_value.value,
+                [panel_heights.key_auth.sharedValue,
+                panel_heights.auth.sharedValue],
+                [panel_heights.key_auth.lower,
+                panel_heights.auth.lower]);
+        return final_value;
     });
     return animation_output;
 };
 
-export const view_bottom_conditional_styles = (props: MainStylesheetProps) => {
-    var conditionalStyle: ViewStyle = { };
+export const view_lower_conditional_styles = (props: MainStylesheetProps) => {
+    var conditionalStyle: ViewStyle = {};
     switch (props.appState) {
         case 'AUTH':
             conditionalStyle.paddingTop = '12%';
@@ -151,14 +185,14 @@ export const app_styles = StyleSheet.create({
     view_container: {
         flex: 1,
     },
-    view_panel_top: {
+    view_panel_upper: {
         width: '100%',
         marginTop: '12%',
     },
     view_panel_center: {
         backgroundColor: 'blue',
     },
-    view_panel_bottom: {
+    view_panel_lower: {
         borderTopLeftRadius: 12,
         borderTopRightRadius: 12,
     }
