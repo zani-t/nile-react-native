@@ -1,37 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 
 import Animated from "react-native-reanimated";
 
-import { AppState } from '../App';
+import { AppState, AppDisplay } from '../App';
 import { auth_styles, auth_animated_styles } from '../styles/auth-stylesheet'
 
 interface AuthElementComponentProps {
-    appStateControl: React.Dispatch<React.SetStateAction<AppState>>;
+    appStateController: React.Dispatch<React.SetStateAction<AppState>>;
+    appDisplayControl: AppDisplay;
+    appDisplayController: React.Dispatch<React.SetStateAction<AppDisplay>>;
 };
 
 const AuthElements: React.FC<AuthElementComponentProps> = (props: AuthElementComponentProps) => {
-    const [componentDisplayed, setComponentDisplayed] = useState(false);
     const [keyboard_focused, set_keyboard_focused] = useState(false);
     const [email, set_email] = useState('');
     const [password, set_password] = useState('');
 
-    // opening sequence
-    useState(async () => {
-        await new Promise(resolve => setTimeout(resolve, 500));
-        setComponentDisplayed(true);
-    });
+    useEffect(() => {
+        async function openingSequence() {
+            await new Promise(resolve => setTimeout(resolve, 500));
+            props.appDisplayController({
+                ...props.appDisplayControl,
+                HeaderLarge: true,
+                AuthElements: true,});
+        }
+        openingSequence();
+    }, []);
 
     const closingSequence = async () => {
-        setComponentDisplayed(false);
+        props.appDisplayController({
+            ...props.appDisplayControl,
+            HeaderLarge: false,
+            AuthElements: false,});
         await new Promise(resolve => setTimeout(resolve, 500));
-        props.appStateControl('HOME');
+        props.appStateController('HOME');
     };
 
     return (
         <Animated.View
             style={[auth_styles.view_auth_content,
-            auth_animated_styles({ componentDisplayed: componentDisplayed })]}>
+                auth_animated_styles({ componentDisplayed: props.appDisplayControl.AuthElements })]}>
             <TextInput
                 style={auth_styles.text_input_auth}
                 autoCapitalize="none"

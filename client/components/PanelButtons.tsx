@@ -1,37 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
 
 import { FontAwesome, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import Animated from "react-native-reanimated";
 
-import { AppState } from '../App';
 import Colors from "../styles/colors";
+import { AppState, AppDisplay } from '../App';
 import { home_styles, home_animated_styles } from '../styles/home-stylesheet';
 
-
 interface PanelButtonComponentProps {
-    appStateControl: React.Dispatch<React.SetStateAction<AppState>>;
+    appStateController: React.Dispatch<React.SetStateAction<AppState>>;
+    appDisplayControl: AppDisplay;
+    appDisplayController: React.Dispatch<React.SetStateAction<AppDisplay>>;
 };
 
 const PanelButtons: React.FC<PanelButtonComponentProps> = (props: PanelButtonComponentProps) => {
-    const [componentDisplayed, setComponentDisplayed] = useState(false);
 
-    // opening sequence
-    useState(async () => {
-        await new Promise(resolve => setTimeout(resolve, 500));
-        setComponentDisplayed(true)
-    });
+    /* useEffect(() => {
+        async function openingSequence() {
+            await new Promise(resolve => setTimeout(resolve, 500));
+            props.appDisplayController({...props.appDisplayControl, PanelButtons: true});
+        }
+        openingSequence();
+    }, []); */
 
     const closingSequence = async () => {
-        setComponentDisplayed(false);
+        props.appDisplayController({
+            ...props.appDisplayControl,
+            HeaderSmall: false,
+            PanelButtons: false,
+            LinkInput: false,});
         await new Promise(resolve => setTimeout(resolve, 500));
-        props.appStateControl('AUTH');
+        props.appStateController('AUTH');
     };
 
     return (
         <Animated.View
             style={[home_styles.view_button_container,
-            home_animated_styles({ componentDisplayed: componentDisplayed })]}>
+            home_animated_styles({ componentDisplayed: props.appDisplayControl.PanelButtons })]}>
             <TouchableOpacity>
                 <FontAwesome
                     name="refresh"
@@ -58,3 +64,12 @@ const PanelButtons: React.FC<PanelButtonComponentProps> = (props: PanelButtonCom
 };
 
 export default PanelButtons;
+
+/*class A extends HeaderSmall {
+    constructor(props?: any) {
+        super(props);
+    };
+    func() {
+        this.setComponentDisplayed(false);
+    }
+};*/

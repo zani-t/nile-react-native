@@ -88,11 +88,14 @@ export const view_top_animated_styles = (props: MainStylesheetProps) => {
 export const view_top_conditional_styles = (props: MainStylesheetProps) => {
     var conditionalStyle: ViewStyle = { };
     switch (props.appState) {
+        case 'SPLASH':
+            conditionalStyle.marginTop = '5%';
+            break;
         case 'AUTH':
             conditionalStyle.justifyContent = 'center';
-        default:
-            return conditionalStyle;
+            break;
     }
+    return conditionalStyle;
 };
 
 export const view_bottom_animated_styles = (props: MainStylesheetProps) => {

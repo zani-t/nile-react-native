@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import Animated from 'react-native-reanimated';
 
-import { app_styles,
+import {
+    app_styles,
     view_container_animated_styles,
     view_top_animated_styles,
     view_top_conditional_styles,
@@ -21,11 +22,29 @@ import AuthElements from './components/AuthElements';
 import PanelButtons from './components/PanelButtons';
 import LinkInput from './components/LinkInput';
 
+export type LinkInputDisplay = 'DEFAULT' | 'BAD_LINK' | 'CONFIRM'
+
 export type AppState = 'SPLASH' | 'AUTH' | 'HOME' | 'CONFIRM' | 'SORT';
+export type AppDisplay = {
+    HeaderLarge: boolean;
+    HeaderSmall: boolean;
+    AuthElements: boolean,
+    PanelButtons: boolean,
+    LinkInput: boolean,
+    LinkInputType: LinkInputDisplay;
+}
 
 export default function App() {
 
     const [appState, setAppState] = useState<AppState>('SPLASH');
+    const [appDisplay, setAppDisplay] = useState<AppDisplay>({
+        HeaderLarge: false,
+        HeaderSmall: false,
+        AuthElements: false,
+        PanelButtons: false,
+        LinkInput: false,
+        LinkInputType: 'DEFAULT',
+    });
 
     return (
 
@@ -36,26 +55,48 @@ export default function App() {
                 style={[app_styles.view_panel_top,
                 view_top_animated_styles({ appState: appState }),
                 view_top_conditional_styles({ appState: appState })]}>
+
                 {appState === 'SPLASH' &&
                     <SplashImage appStateControl={setAppState} />}
                 {appState === 'AUTH' &&
-                    <HeaderLarge appStateControl={setAppState} />}
+                    <HeaderLarge appDisplayControl={appDisplay} />}
                 {appState === 'HOME' &&
-                    <HeaderSmall appStateControl={setAppState} />}
+                    <HeaderSmall appDisplayControl={appDisplay}
+                        /* appDisplayController={setAppDisplay} */ />}
+
             </TopPanel>
+            
+            {
+            // panelbuttons calls appdisplaycontroller to display components
+            
+            }
+
             <BottomPanel
                 style={[app_styles.view_panel_bottom,
                 view_bottom_animated_styles({ appState: appState }),
                 view_bottom_conditional_styles({ appState: appState })]}>
+
                 {appState === 'AUTH' &&
-                    <AuthElements appStateControl={setAppState} />}
+                    <AuthElements
+                        appStateController={setAppState}
+                        appDisplayControl={appDisplay}
+                        appDisplayController={setAppDisplay} />}
                 {appState === 'HOME' &&
-                    <><PanelButtons appStateControl={setAppState} />
-                    <LinkInput appStateControl={setAppState} /></>}
+                    <>
+                        <PanelButtons
+                            appStateController={setAppState}
+                            appDisplayControl={appDisplay}
+                            appDisplayController={setAppDisplay} />
+                        <LinkInput
+                            appStateController={setAppState}
+                            appDisplayControl={appDisplay}
+                            appDisplayController={setAppDisplay} />
+                    </>}
+
             </BottomPanel>
             <StatusBar style="light" />
         </Animated.View>
-        
+
     );
 
 };
@@ -72,7 +113,7 @@ export default function App() {
 
 /*
  * top panel - splash image, yw large, yw small, stored headline
- * center panel - category list 
+ * center panel - category list
  * bottom panel - auth input, control buttons, queried headline, text input, extra articles, all articles
  */
 
