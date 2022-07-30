@@ -5,9 +5,10 @@ from newspaper import Article
 from newspaper import Source
 import ast
 
-# Create your views here.
+# Newspaper query
 @csrf_exempt
 def query(request):
+    # Remove & add @api_view decorator from RestFramework
     if request.method == 'POST':
         url = ast.literal_eval(request.body.decode("utf-8")).get('url', 'NULL_URL')
 
@@ -24,4 +25,5 @@ def query(request):
         article_info['source'] = Source(new_article.source_url).brand.upper() if Source(new_article.source_url).brand else 'NULL_BRAND'
         article_info['url'] = url
 
+        # Change to Response from RestFramework
         return JsonResponse(article_info)
