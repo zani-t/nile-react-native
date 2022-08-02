@@ -4,13 +4,22 @@ import { StatusBar } from 'expo-status-bar';
 import Animated from 'react-native-reanimated';
 
 import {
-    app_styles,
-    view_container_animated_styles,
-    view_upper_animated_styles,
-    view_upper_conditional_styles,
-    view_lower_animated_styles,
-    view_lower_conditional_styles,
+    appStyles,
+    viewContainerAnimatedStyles,
+    viewUpperAnimatedStyles,
+    viewUpperConditionalStyles,
+    viewLowerAnimatedStyles,
+    viewLowerConditionalStyles,
 } from './styles/app-stylesheet';
+
+import {
+    _appStyles,
+    _viewContainerAnimatedStyles,
+    _viewUpperAnimatedStyles,
+    _viewUpperConditionalStyles,
+    _viewLowerAnimatedStyles,
+    _viewLowerConditionalStyles,
+} from './styles/new-app-stylesheet';
 
 import UpperPanel from './components/upper-panel/UpperPanel';
 import SplashImage from './components/SplashImage';
@@ -47,6 +56,20 @@ export default function App() {
         LinkInput: false,
         LinkInputType: 'DEFAULT',
     });
+    const [toggleState, setToggleState] = useState(0);
+
+    const getStates = async () => {
+        return {
+            appState: appState,
+            appStateController: setAppState,
+            keyboardState: keyboardState,
+            keyboardStateController: setKeyboardState,
+            appDisplay: appDisplay,
+            appDisplayController: setAppDisplay,
+            toggleState: toggleState,
+            toggleStateController: setToggleState,
+        };
+    };
 
     return (
 
@@ -54,16 +77,21 @@ export default function App() {
             appStateController={setAppState}
             appDisplayController={setAppDisplay}
             keyboardStateController={setKeyboardState} >
+
             <Animated.View
-                style={[app_styles.view_container,
-                view_container_animated_styles({ appState: appState })]}>
+                style={[appStyles.viewContainer,
+                viewContainerAnimatedStyles({
+                    states: getStates(),
+                    initialState: [appState, keyboardState],
+                })]}>
+
                 <UpperPanel
-                    style={[app_styles.view_panel_upper,
-                    view_upper_animated_styles({
-                        appState: appState,
-                        keyboardState: keyboardState,
+                    style={[appStyles.viewPanelUpper,
+                    viewUpperAnimatedStyles({
+                        states: getStates(),
+                        initialState: [appState, keyboardState],
                     }),
-                    view_upper_conditional_styles({ appState: appState })]}>
+                    viewUpperConditionalStyles({ appState: appState })]}>
 
                     {appState === 'SPLASH' &&
                         <SplashImage appStateControl={setAppState} />}
@@ -79,29 +107,21 @@ export default function App() {
                 }
 
                 <LowerPanel
-                    style={[app_styles.view_panel_lower,
-                    view_lower_animated_styles({
-                        appState: appState,
-                        keyboardState: keyboardState,
+                    style={[appStyles.viewPanelLower,
+                    viewLowerAnimatedStyles({
+                        states: getStates(),
+                        initialState: [appState, keyboardState],
                     }),
-                    view_lower_conditional_styles({ appState: appState })]}>
+                    viewLowerConditionalStyles({ appState: appState })]}>
 
                     {appState === 'AUTH' &&
-                        <AuthElements
-                            appStateController={setAppState}
-                            appDisplayControl={appDisplay}
-                            appDisplayController={setAppDisplay}
-                            keyboardStateController={setKeyboardState} />}
+                        <AuthElements states={getStates} />}
                     {appState === 'HOME' &&
                         <>
                             <PanelButtons
-                                appStateController={setAppState}
-                                appDisplayControl={appDisplay}
-                                appDisplayController={setAppDisplay} />
+                                states={getStates()} />
                             <LinkInput
-                                appStateController={setAppState}
-                                appDisplayControl={appDisplay}
-                                appDisplayController={setAppDisplay} />
+                                states={getStates()} />
                         </>}
 
                 </LowerPanel>
@@ -112,45 +132,3 @@ export default function App() {
     );
 
 };
-
-
-
-
-
-
-
-
-
-
-
-/*
- * top panel - splash image, yw large, yw small, stored headline
- * center panel - category list
- * bottom panel - auth input, control buttons, queried headline, text input, extra articles, all articles
- */
-
-// animation method - fade elements, change state, show new elements
-
-// permanent - container, above panel
-
-// splash - container blue, splash image
-// auth - container green, panel up, panel green, header, inputs
-// home - panel down, panel white, stored article, panel buttons, enter link, other articles
-// confirm - panel up, queried article
-// categories - panel down, inner panel up, categories, articles
-
-// all components
-// *splash image
-
-// *yw header 1
-// *auth elements (email, password, buttons* - contact mongo)
-
-// *yw header 2
-// stored headline (photo, text)* - go to web
-// panel buttons* - refresh[/contact mongo], log out, trigger categories
-// txt input* - contact django & trigger confirm stg 1 // set category, contact mongo, trigger home
-// extra articles* - go to web
-// queried headline (photo, text)* - trigger confirm stg 2, change txt input properties
-// category list
-// article list (text*) - [rearrange/renamea articles/partially reload list]
-// home button - trigger home, contact mongo

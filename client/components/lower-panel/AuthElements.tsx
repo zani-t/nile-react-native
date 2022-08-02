@@ -10,10 +10,7 @@ import { AxiosStatic } from '../../context/AxiosContext';
 import { auth_styles, auth_animated_styles } from '../../styles/auth-stylesheet'
 
 interface AuthElementComponentProps {
-    appStateController: React.Dispatch<React.SetStateAction<AppState>>;
-    appDisplayControl: AppDisplay;
-    appDisplayController: React.Dispatch<React.SetStateAction<AppDisplay>>;
-    keyboardStateController: React.Dispatch<React.SetStateAction<KeyboardState>>;
+    states: any,
 };
 
 const AuthElements: React.FC<AuthElementComponentProps> = (props: AuthElementComponentProps) => {
@@ -23,8 +20,8 @@ const AuthElements: React.FC<AuthElementComponentProps> = (props: AuthElementCom
     const [password, set_password] = useState('');
 
     const setAppDisplay = async (header_setting: boolean, auth_setting: boolean) => {
-        props.appDisplayController({
-            ...props.appDisplayControl,
+        props.states.appDisplayController({
+            ...props.states.appDisplayControl,
             HeaderLarge: header_setting,
             AuthElements: auth_setting,
         });
@@ -40,9 +37,9 @@ const AuthElements: React.FC<AuthElementComponentProps> = (props: AuthElementCom
         const keyboardListener = Keyboard.addListener("keyboardDidHide", async () => {
             setAppDisplay(true, true);
             Keyboard.dismiss();
-            props.keyboardStateController('TRANSITION');
+            props.states.keyboardStateController('TRANSITION');
             await new Promise(resolve => setTimeout(resolve, 750));
-            props.keyboardStateController('OFF');
+            props.states.keyboardStateController('OFF');
         });
         return () => { keyboardListener.remove(); };
     }, []);
@@ -58,10 +55,14 @@ const AuthElements: React.FC<AuthElementComponentProps> = (props: AuthElementCom
                 authTokens: response.data,
             });
 
-            props.keyboardStateController('OFF');
+            if (props.states.keyboardStateControl === 'AUTH') {
+                Keyboard.dismiss();
+            }
+
+            props.states.keyboardStateController('OFF');
             setAppDisplay(false, false);
             await new Promise(resolve => setTimeout(resolve, 500));
-            props.appStateController('HOME');
+            props.states.appStateController('HOME');
         } catch (error: any) {
             console.log('Login Failed', error);
         }
@@ -70,22 +71,22 @@ const AuthElements: React.FC<AuthElementComponentProps> = (props: AuthElementCom
     const registerSequence = async () => { };
 
     const setKeyboardState = async (keyboardState: KeyboardState) => {
-        props.appDisplayController(keyboardState === 'AUTH' ? {
-            ...props.appDisplayControl,
+        props.states.appDisplayController(keyboardState === 'AUTH' ? {
+            ...props.states.appDisplayControl,
             HeaderLarge: false,
             AuthElements: true,
         } : {
-            ...props.appDisplayControl,
+            ...props.states.appDisplayControl,
             HeaderLarge: true,
             AuthElements: true,
         });
-        props.keyboardStateController(keyboardState);
+        props.states.keyboardStateController(keyboardState);
     };
 
     return (
         <Animated.View
             style={[auth_styles.view_auth_content,
-            auth_animated_styles({ componentDisplayed: props.appDisplayControl.AuthElements })]}>
+            auth_animated_styles({ componentDisplayed: props.states.appDisplayControl.AuthElements })]}>
             <TextInput
                 style={auth_styles.text_input_auth}
                 autoCapitalize="none"

@@ -9,9 +9,7 @@ import { AppState, AppDisplay } from '../../App';
 import { home_styles, home_animated_styles } from '../../styles/home-stylesheet';
 
 interface PanelButtonComponentProps {
-    appStateController: React.Dispatch<React.SetStateAction<AppState>>;
-    appDisplayControl: AppDisplay;
-    appDisplayController: React.Dispatch<React.SetStateAction<AppDisplay>>;
+    states: any;
 };
 
 const PanelButtons: React.FC<PanelButtonComponentProps> = (props: PanelButtonComponentProps) => {
@@ -25,19 +23,19 @@ const PanelButtons: React.FC<PanelButtonComponentProps> = (props: PanelButtonCom
     }, []); */
 
     const closingSequence = async () => {
-        props.appDisplayController({
-            ...props.appDisplayControl,
+        props.states.appDisplayController({
+            ...props.states.appDisplayControl,
             HeaderSmall: false,
             PanelButtons: false,
             LinkInput: false,});
         await new Promise(resolve => setTimeout(resolve, 500));
-        props.appStateController('AUTH');
+        props.states.appStateController('AUTH');
     };
 
     return (
         <Animated.View
             style={[home_styles.view_button_container,
-            home_animated_styles({ componentDisplayed: props.appDisplayControl.PanelButtons })]}>
+            home_animated_styles({ componentDisplayed: props.states.appDisplayControl.PanelButtons })]}>
             <TouchableOpacity>
                 <FontAwesome
                     name="refresh"
