@@ -2,13 +2,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Keyboard, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import Animated from 'react-native-reanimated';
-import axios from 'axios';
+import jwtDecode from 'jwt-decode';
 
 import { AppState, KeyboardState, AppDisplay } from '../../App';
 import { AuthContext } from '../../context/AuthContext';
-import { axiosInstance } from '../../context/AxiosContext';
+import { AxiosStatic } from '../../context/AxiosContext';
 import { auth_styles, auth_animated_styles } from '../../styles/auth-stylesheet'
-import jwtDecode from 'jwt-decode';
 
 interface AuthElementComponentProps {
     appStateController: React.Dispatch<React.SetStateAction<AppState>>;
@@ -50,34 +49,22 @@ const AuthElements: React.FC<AuthElementComponentProps> = (props: AuthElementCom
 
     const signInSequence = async () => {
         try {
-            /*const response = await axiosInstance.post('token/', {
-                username: email,
-                password: password
-            });*/
-            const response = await axiosInstance.post('token/', {
+            const response = await AxiosStatic.post('token/', {
                 username: 'zani',
-                password: 'adminpassword'
+                password: 'adminpassword',
             });
-            console.log(jwtDecode(response.data.access));
-            /*const data = ;
             authContext?.setAuthState({
-                email: ,
-                authTokens: ,
-            });*/
+                user: jwtDecode(response.data.access),
+                authTokens: response.data,
+            });
 
             props.keyboardStateController('OFF');
             setAppDisplay(false, false);
             await new Promise(resolve => setTimeout(resolve, 500));
             props.appStateController('HOME');
-
         } catch (error: any) {
             console.log('Login Failed', error);
         }
-
-        /*props.keyboardStateController('OFF');
-        setAppDisplay(false, false);
-        await new Promise(resolve => setTimeout(resolve, 500));
-        props.appStateController('HOME');*/
     };
 
     const registerSequence = async () => { };

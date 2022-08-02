@@ -10,7 +10,7 @@ interface AuthProviderProps {
 };
 
 interface AuthStateProps {
-    email: any,
+    user: any,
     authTokens: any,
 };
 
@@ -24,13 +24,13 @@ export const AuthContext = createContext<AuthContextProps | null>(null);
 export const AuthProvider = (props: AuthProviderProps) => {
 
     const [authState, setAuthState] = useState<AuthStateProps>({
-        email: null,
+        user: null,
         authTokens: null,
     });
 
     const logoutUser = () => {
         setAuthState({
-            email: null,
+            user: null,
             authTokens: null,
         });
         // Remove authTokens from keychain storage
