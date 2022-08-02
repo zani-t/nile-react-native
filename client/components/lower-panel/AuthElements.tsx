@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Keyboard, Text, TextInput, TouchableOpacity, View } from "react-native";
+import React, { useContext, useEffect, useState } from 'react';
+import { Keyboard, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
-import Animated from "react-native-reanimated";
+import Animated from 'react-native-reanimated';
+import jwtDecode from 'jwt-decode';
 
 import { AppState, KeyboardState, AppDisplay } from '../../App';
+import { AuthContext } from '../../context/AuthContext';
+import { AxiosStatic } from '../../context/AxiosContext';
 import { auth_styles, auth_animated_styles } from '../../styles/auth-stylesheet'
 
 interface AuthElementComponentProps {
@@ -14,6 +17,8 @@ interface AuthElementComponentProps {
 };
 
 const AuthElements: React.FC<AuthElementComponentProps> = (props: AuthElementComponentProps) => {
+
+    const authContext = useContext(AuthContext);
     const [email, set_email] = useState('');
     const [password, set_password] = useState('');
 
@@ -42,12 +47,27 @@ const AuthElements: React.FC<AuthElementComponentProps> = (props: AuthElementCom
         return () => { keyboardListener.remove(); };
     }, []);
 
-    const closingSequence = async () => {
-        props.keyboardStateController('OFF');
-        setAppDisplay(false, false);
-        await new Promise(resolve => setTimeout(resolve, 500));
-        props.appStateController('HOME');
+    const signInSequence = async () => {
+        try {
+            const response = await AxiosStatic.post('token/', {
+                username: 'zani',
+                password: 'adminpassword',
+            });
+            authContext?.setAuthState({
+                user: jwtDecode(response.data.access),
+                authTokens: response.data,
+            });
+
+            props.keyboardStateController('OFF');
+            setAppDisplay(false, false);
+            await new Promise(resolve => setTimeout(resolve, 500));
+            props.appStateController('HOME');
+        } catch (error: any) {
+            console.log('Login Failed', error);
+        }
     };
+
+    const registerSequence = async () => { };
 
     const setKeyboardState = async (keyboardState: KeyboardState) => {
         props.appDisplayController(keyboardState === 'AUTH' ? {
@@ -85,16 +105,17 @@ const AuthElements: React.FC<AuthElementComponentProps> = (props: AuthElementCom
                 value={password}
                 secureTextEntry={true} />
             <View style={auth_styles.view_button_container}>
-                <TouchableOpacity onPress={closingSequence}>
+                <TouchableOpacity onPress={signInSequence}>
                     <Text style={auth_styles.text_button}>SIGN IN </Text>
                 </TouchableOpacity>
                 <Text style={auth_styles.text_button}> / </Text>
-                <TouchableOpacity onPress={closingSequence}>
+                <TouchableOpacity onPress={registerSequence}>
                     <Text style={auth_styles.text_button}> REGISTER</Text>
                 </TouchableOpacity>
             </View>
         </Animated.View>
     );
+
 };
 
 export default AuthElements;

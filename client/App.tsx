@@ -21,8 +21,9 @@ import LowerPanel from './components/lower-panel/LowerPanel';
 import AuthElements from './components/lower-panel/AuthElements';
 import PanelButtons from './components/lower-panel/PanelButtons';
 import LinkInput from './components/lower-panel/LinkInput';
+import { AuthProvider } from './context/AuthContext';
 
-export type AppState = 'SPLASH' | 'AUTH'| 'HOME' | 'CONFIRM' | 'SORT';
+export type AppState = 'SPLASH' | 'AUTH' | 'HOME' | 'CONFIRM' | 'SORT';
 export type KeyboardState = 'OFF' | 'TRANSITION' | 'AUTH' | 'LINK'
 export type LinkInputDisplay = 'DEFAULT' | 'BAD_LINK' | 'CONFIRM'
 export type AppDisplay = {
@@ -49,59 +50,64 @@ export default function App() {
 
     return (
 
-        <Animated.View
-            style={[app_styles.view_container,
-            view_container_animated_styles({ appState: appState })]}>
-            <UpperPanel
-                style={[app_styles.view_panel_upper,
-                view_upper_animated_styles({
-                    appState: appState,
-                    keyboardState: keyboardState,
-                }),
-                view_upper_conditional_styles({ appState: appState })]}>
+        <AuthProvider
+            appStateController={setAppState}
+            appDisplayController={setAppDisplay}
+            keyboardStateController={setKeyboardState} >
+            <Animated.View
+                style={[app_styles.view_container,
+                view_container_animated_styles({ appState: appState })]}>
+                <UpperPanel
+                    style={[app_styles.view_panel_upper,
+                    view_upper_animated_styles({
+                        appState: appState,
+                        keyboardState: keyboardState,
+                    }),
+                    view_upper_conditional_styles({ appState: appState })]}>
 
-                {appState === 'SPLASH' &&
-                    <SplashImage appStateControl={setAppState} />}
-                {appState === 'AUTH' &&
-                    <HeaderLarge appDisplayControl={appDisplay} />}
-                {appState === 'HOME' &&
-                    <HeaderSmall appDisplayControl={appDisplay} />}
+                    {appState === 'SPLASH' &&
+                        <SplashImage appStateControl={setAppState} />}
+                    {appState === 'AUTH' &&
+                        <HeaderLarge appDisplayControl={appDisplay} />}
+                    {appState === 'HOME' &&
+                        <HeaderSmall appDisplayControl={appDisplay} />}
 
-            </UpperPanel>
-            
-            {
-            // panelbuttons calls appdisplaycontroller to display components
-            }
+                </UpperPanel>
 
-            <LowerPanel
-                style={[app_styles.view_panel_lower,
-                view_lower_animated_styles({
-                    appState: appState,
-                    keyboardState: keyboardState,
-                }),
-                view_lower_conditional_styles({ appState: appState })]}>
+                {
+                    // panelbuttons calls appdisplaycontroller to display components
+                }
 
-                {appState === 'AUTH' &&
-                    <AuthElements
-                        appStateController={setAppState}
-                        appDisplayControl={appDisplay}
-                        appDisplayController={setAppDisplay}
-                        keyboardStateController={setKeyboardState}/>}
-                {appState === 'HOME' &&
-                    <>
-                        <PanelButtons
+                <LowerPanel
+                    style={[app_styles.view_panel_lower,
+                    view_lower_animated_styles({
+                        appState: appState,
+                        keyboardState: keyboardState,
+                    }),
+                    view_lower_conditional_styles({ appState: appState })]}>
+
+                    {appState === 'AUTH' &&
+                        <AuthElements
                             appStateController={setAppState}
                             appDisplayControl={appDisplay}
-                            appDisplayController={setAppDisplay} />
-                        <LinkInput
-                            appStateController={setAppState}
-                            appDisplayControl={appDisplay}
-                            appDisplayController={setAppDisplay} />
-                    </>}
+                            appDisplayController={setAppDisplay}
+                            keyboardStateController={setKeyboardState} />}
+                    {appState === 'HOME' &&
+                        <>
+                            <PanelButtons
+                                appStateController={setAppState}
+                                appDisplayControl={appDisplay}
+                                appDisplayController={setAppDisplay} />
+                            <LinkInput
+                                appStateController={setAppState}
+                                appDisplayControl={appDisplay}
+                                appDisplayController={setAppDisplay} />
+                        </>}
 
-            </LowerPanel>
-            <StatusBar style="light" />
-        </Animated.View>
+                </LowerPanel>
+                <StatusBar style="light" />
+            </Animated.View>
+        </AuthProvider>
 
     );
 

@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { TextInput, TouchableOpacity } from "react-native";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Animated from "react-native-reanimated";
 
 import { AppState, AppDisplay } from '../../App';
+import { AuthContext } from '../../context/AuthContext';
+import { AxiosDynamic } from '../../context/AxiosContext';
 import { home_styles, home_animated_styles } from '../../styles/home-stylesheet';
 
 interface LinkInputComponentProps {
@@ -15,8 +17,11 @@ interface LinkInputComponentProps {
 
 const LinkInput: React.FC<LinkInputComponentProps> = (props: LinkInputComponentProps) => {
 
+    const authContext = useContext(AuthContext);
     const [link, setLink] = useState('');
     const [category, setCategory] = useState('');
+
+    const api = AxiosDynamic();
 
     useEffect(() => {
         async function openingSequence() {
@@ -26,6 +31,10 @@ const LinkInput: React.FC<LinkInputComponentProps> = (props: LinkInputComponentP
                 HeaderSmall: true,
                 PanelButtons: true,
                 LinkInput: true,});
+            
+            const request = await api.get('getNotes/');
+            console.log(request.data);
+
         }
         openingSequence();
     }, []);

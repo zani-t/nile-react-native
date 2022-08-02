@@ -12,6 +12,10 @@ from newspaper import Article
 from newspaper import Source
 import ast
 
+@api_view(['GET'])
+def test(request):
+    return Response({'test': 'hello'})
+
 # Token views
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
