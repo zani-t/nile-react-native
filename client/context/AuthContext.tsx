@@ -1,12 +1,10 @@
 import React, { createContext, useState } from "react";
 
-import { AppState, KeyboardState, AppDisplay } from '../App';
+import { AppState, KeyboardState, AppDisplay } from '../bin/App';
 
 interface AuthProviderProps {
     children: React.ReactNode;
-    appStateController: React.Dispatch<React.SetStateAction<AppState>>;
-    appDisplayController: React.Dispatch<React.SetStateAction<AppDisplay>>;
-    keyboardStateController: React.Dispatch<React.SetStateAction<KeyboardState>>;
+    states?: any;
 };
 
 interface AuthStateProps {

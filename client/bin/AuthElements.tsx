@@ -4,10 +4,10 @@ import { Keyboard, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import Animated from 'react-native-reanimated';
 import jwtDecode from 'jwt-decode';
 
-import { AppState, KeyboardState, AppDisplay } from '../../App';
-import { AuthContext } from '../../context/AuthContext';
-import { AxiosStatic } from '../../context/AxiosContext';
-import { auth_styles, auth_animated_styles } from '../../styles/auth-stylesheet'
+import { AppState, KeyboardState, AppDisplay } from './App';
+import { AuthContext } from '../context/AuthContext';
+import { AxiosStatic } from '../context/AxiosContext';
+import { auth_styles, auth_animated_styles } from './auth-stylesheet'
 
 interface AuthElementComponentProps {
     states: any,

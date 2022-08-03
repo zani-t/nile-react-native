@@ -4,8 +4,8 @@ import React from 'react';
 import Animated from 'react-native-reanimated';
 
 interface UpperPanelProps {
-    style: ViewStyle[];
-    children: React.ReactNode;
+    style?: ViewStyle[];
+    children?: React.ReactNode;
 };
 
 const UpperPanel: React.FC<UpperPanelProps> = (props: UpperPanelProps) => {

@@ -3,12 +3,12 @@ import React from 'react';
 
 import Animated from 'react-native-reanimated';
 
-interface LowerPanelProps {
+interface CenterPanelProps {
     style?: ViewStyle[];
     children?: React.ReactNode;
 };
 
-const LowerPanel: React.FC<LowerPanelProps> = (props: LowerPanelProps) => {
+const CenterPanel: React.FC<CenterPanelProps> = (props: CenterPanelProps) => {
     return (
         <Animated.View style={props.style}>
             {props.children}
@@ -16,4 +16,4 @@ const LowerPanel: React.FC<LowerPanelProps> = (props: LowerPanelProps) => {
     );
 };
 
-export default LowerPanel;
+export default CenterPanel;

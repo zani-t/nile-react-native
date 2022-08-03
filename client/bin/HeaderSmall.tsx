@@ -3,8 +3,8 @@ import { Text, View } from "react-native";
 
 import Animated from "react-native-reanimated";
 
-import { AppDisplay } from '../../App';
-import { home_styles, home_animated_styles } from '../../styles/home-stylesheet'
+import { AppDisplay } from './App';
+import { home_styles, home_animated_styles } from './home-stylesheet'
 
 interface HeaderSmallComponentProps {
     appDisplayControl: AppDisplay;

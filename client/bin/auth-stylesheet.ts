@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming, } from 'react-native-reanimated';
 
-import Colors from './colors';
+import Colors from './Colors';
 
 interface AuthStylesheetProps {
     componentDisplayed: boolean;

@@ -1,134 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 import { StatusBar } from 'expo-status-bar';
 import Animated from 'react-native-reanimated';
 
-import {
-    appStyles,
-    viewContainerAnimatedStyles,
-    viewUpperAnimatedStyles,
-    viewUpperConditionalStyles,
-    viewLowerAnimatedStyles,
-    viewLowerConditionalStyles,
-} from './styles/app-stylesheet';
-
-import {
-    _appStyles,
-    _viewContainerAnimatedStyles,
-    _viewUpperAnimatedStyles,
-    _viewUpperConditionalStyles,
-    _viewLowerAnimatedStyles,
-    _viewLowerConditionalStyles,
-} from './styles/new-app-stylesheet';
-
-import UpperPanel from './components/upper-panel/UpperPanel';
-import SplashImage from './components/SplashImage';
-import HeaderLarge from './components/upper-panel/HeaderLarge';
-import HeaderSmall from './components/upper-panel/HeaderSmall';
-
-import LowerPanel from './components/lower-panel/LowerPanel';
-import AuthElements from './components/lower-panel/AuthElements';
-import PanelButtons from './components/lower-panel/PanelButtons';
-import LinkInput from './components/lower-panel/LinkInput';
-import { AuthProvider } from './context/AuthContext';
-
-export type AppState = 'SPLASH' | 'AUTH' | 'HOME' | 'CONFIRM' | 'SORT';
-export type KeyboardState = 'OFF' | 'TRANSITION' | 'AUTH' | 'LINK'
-export type LinkInputDisplay = 'DEFAULT' | 'BAD_LINK' | 'CONFIRM'
-export type AppDisplay = {
-    HeaderLarge: boolean;
-    HeaderSmall: boolean;
-    AuthElements: boolean,
-    PanelButtons: boolean,
-    LinkInput: boolean,
-    LinkInputType: LinkInputDisplay;
-}
+import { AuthProvider } from "./context/AuthContext";
+import * as LSU from "./utils/LayoutStateUtils"; // LSU: LayoutStateUtilities
+import UpperPanel from "./components/upper-panel/UpperPanel";
+import CenterPanel from "./components/upper-panel/UpperPanel";
+import LowerPanel from "./components/upper-panel/UpperPanel";
+import SplashImage from "./components/upper-panel/SplashImage";
+import { containerStyles, viewContainerAnimatedStyles } from "./styles/ContainerStylesheet";
 
 export default function App() {
 
-    const [appState, setAppState] = useState<AppState>('SPLASH');
-    const [keyboardState, setKeyboardState] = useState<KeyboardState>('OFF');
-    const [appDisplay, setAppDisplay] = useState<AppDisplay>({
-        HeaderLarge: false,
-        HeaderSmall: false,
-        AuthElements: false,
-        PanelButtons: false,
-        LinkInput: false,
-        LinkInputType: 'DEFAULT',
-    });
-    const [toggleState, setToggleState] = useState(0);
+    // goal - begin from splash screen -> toggle, set app state to auth
 
-    const getStates = async () => {
+    // when splash is finished -> toggle 0 to 1
+    // interpolate: 0 = initial value, 1 = new value
+
+    // const [animationToggle, setAnimationToggle] = useState(0);
+    const [initialState, setInitialState] = useState<LSU.PanelState>('SPLASH');
+    const [targetState, setTargetState] = useState<LSU.PanelState>('SPLASH');
+    const [displayState, setDisplayState] = useState<LSU.DisplayState>(LSU.SplashDisplayState);
+
+    const getStates = () => {
         return {
-            appState: appState,
-            appStateController: setAppState,
-            keyboardState: keyboardState,
-            keyboardStateController: setKeyboardState,
-            appDisplay: appDisplay,
-            appDisplayController: setAppDisplay,
-            toggleState: toggleState,
-            toggleStateController: setToggleState,
+            states: {
+                // animToggle: animationToggle,
+                initialState: initialState,
+                targetState: targetState,
+                displayState: displayState,
+                // setAnimToggle: setAnimationToggle,
+                setInitialState: setInitialState,
+                setTargetState: setTargetState,
+                setDisplayState: setDisplayState,
+            },
         };
     };
 
     return (
-
-        <AuthProvider
-            appStateController={setAppState}
-            appDisplayController={setAppDisplay}
-            keyboardStateController={setKeyboardState} >
-
-            <Animated.View
-                style={[appStyles.viewContainer,
-                viewContainerAnimatedStyles({
-                    states: getStates(),
-                    initialState: [appState, keyboardState],
-                })]}>
-
-                <UpperPanel
-                    style={[appStyles.viewPanelUpper,
-                    viewUpperAnimatedStyles({
-                        states: getStates(),
-                        initialState: [appState, keyboardState],
-                    }),
-                    viewUpperConditionalStyles({ appState: appState })]}>
-
-                    {appState === 'SPLASH' &&
-                        <SplashImage appStateControl={setAppState} />}
-                    {appState === 'AUTH' &&
-                        <HeaderLarge appDisplayControl={appDisplay} />}
-                    {appState === 'HOME' &&
-                        <HeaderSmall appDisplayControl={appDisplay} />}
-
+        <AuthProvider>
+            <Animated.View style={[
+                containerStyles.viewContainer,
+                viewContainerAnimatedStyles(getStates())]}>
+                <UpperPanel>
+                    {initialState === 'SPLASH' &&
+                        <SplashImage states={getStates().states} />}
                 </UpperPanel>
+                <CenterPanel>
 
-                {
-                    // panelbuttons calls appdisplaycontroller to display components
-                }
-
-                <LowerPanel
-                    style={[appStyles.viewPanelLower,
-                    viewLowerAnimatedStyles({
-                        states: getStates(),
-                        initialState: [appState, keyboardState],
-                    }),
-                    viewLowerConditionalStyles({ appState: appState })]}>
-
-                    {appState === 'AUTH' &&
-                        <AuthElements states={getStates} />}
-                    {appState === 'HOME' &&
-                        <>
-                            <PanelButtons
-                                states={getStates()} />
-                            <LinkInput
-                                states={getStates()} />
-                        </>}
+                </CenterPanel>
+                <LowerPanel>
 
                 </LowerPanel>
-                <StatusBar style="light" />
             </Animated.View>
+            <StatusBar style="light" />
         </AuthProvider>
-
     );
-
 };

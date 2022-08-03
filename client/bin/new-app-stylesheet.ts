@@ -1,8 +1,8 @@
 import { Dimensions, StyleSheet, ViewStyle } from "react-native";
 import { interpolate, interpolateColor, useAnimatedStyle, useDerivedValue, withTiming, } from 'react-native-reanimated';
 
-import { AppState, KeyboardState } from '../App';
-import Colors from './colors';
+import { AppState, KeyboardState } from './App';
+import Colors from './Colors';
 
 interface MainStylesheetProps {
     states: any,
@@ -19,20 +19,20 @@ const { height, width } = Dimensions.get('window');
 
 
 // Animated styles
-export const viewContainerAnimatedStyles = (props: MainStylesheetProps) => {
+export const _viewContainerAnimatedStyles = (props: MainStylesheetProps) => {
 
 }
 
-export const viewUpperAnimatedStyles = (props: MainStylesheetProps) => {
+export const _viewUpperAnimatedStyles = (props: MainStylesheetProps) => {
 
 }
 
-export const viewLowerAnimatedStyles = (props: MainStylesheetProps) => {
+export const _viewLowerAnimatedStyles = (props: MainStylesheetProps) => {
 
 }
 
 // Conditional styles
-export const viewUpperConditionalStyles = (props: ConditionalStylesheetProps) => {
+export const _viewUpperConditionalStyles = (props: ConditionalStylesheetProps) => {
     let conditionalStyle: ViewStyle = {};
     switch (props.appState) {
         case 'SPLASH':
@@ -45,7 +45,7 @@ export const viewUpperConditionalStyles = (props: ConditionalStylesheetProps) =>
     return conditionalStyle;
 };
 
-export const viewLowerConditionalStyles = (props: ConditionalStylesheetProps) => {
+export const _viewLowerConditionalStyles = (props: ConditionalStylesheetProps) => {
     let conditionalStyle: ViewStyle = {};
     switch (props.appState) {
         case 'AUTH':
@@ -55,7 +55,7 @@ export const viewLowerConditionalStyles = (props: ConditionalStylesheetProps) =>
     }
 };
 
-export const appStyles = StyleSheet.create({
+export const _appStyles = StyleSheet.create({
     viewContainer: {
         flex: 1,
     },

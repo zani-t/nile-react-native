@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet } from "react-native";
 import { useAnimatedStyle, useDerivedValue, withTiming, } from 'react-native-reanimated';
 
-import Colors from "./colors";
+import Colors from "./Colors";
 
 interface HomeStylesheetProps {
     componentDisplayed: boolean;

@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react';
 import * as Font from 'expo-font';
 import Animated from 'react-native-reanimated';
 
-import { AppState } from '../App';
-import { splash_styles, image_splash_animated_styles } from '../styles/splash-stylesheet';
+import { AppState } from './App';
+import { splash_styles, image_splash_animated_styles } from './splash-stylesheet';
 
 interface SplashComponentProps {
     appStateControl: React.Dispatch<React.SetStateAction<AppState>>;

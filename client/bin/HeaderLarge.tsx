@@ -2,8 +2,8 @@ import React from "react";
 
 import Animated from "react-native-reanimated";
 
-import { AppDisplay } from '../../App';
-import { auth_styles, auth_animated_styles } from '../../styles/auth-stylesheet'
+import { AppDisplay } from './App';
+import { auth_styles, auth_animated_styles } from './auth-stylesheet'
 
 interface HeaderLargeComponentProps {
     appDisplayControl: AppDisplay;

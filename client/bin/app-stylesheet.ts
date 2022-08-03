@@ -1,8 +1,8 @@
 import { Dimensions, StyleSheet, ViewStyle } from "react-native";
 import { interpolate, interpolateColor, useAnimatedStyle, useDerivedValue, withTiming, } from 'react-native-reanimated';
 
-import { AppState, KeyboardState } from '../App';
-import Colors from './colors';
+import { AppState, KeyboardState } from './App';
+import Colors from './Colors';
 
 interface MainStylesheetProps {
     states: any,
