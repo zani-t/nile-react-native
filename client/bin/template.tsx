@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 
 import Animated from "react-native-reanimated";
 
-import { AppState } from '../bin/App';
+import { AppState } from './App';
 // import { _styles, _animated_styles } from '../styles/-stylesheet'
 
 interface _ComponentProps {

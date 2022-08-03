@@ -5,7 +5,7 @@ import Animated from 'react-native-reanimated';
 
 interface UpperPanelProps {
     style?: ViewStyle[];
-    children?: React.ReactNode;
+    children: React.ReactNode;
 };
 
 const UpperPanel: React.FC<UpperPanelProps> = (props: UpperPanelProps) => {

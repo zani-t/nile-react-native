@@ -5,10 +5,10 @@ import { useAnimatedStyle, useDerivedValue, withTiming } from 'react-native-rean
 import * as LSU from './../../utils/LayoutStateUtils';
 import * as SCU from './../../utils/StyleConstUtils';
 
-export const imageSplashAnimatedStyles = (props: LSU.DisplayState) => {
+export const headerLargeAnimatedStyles = (props: LSU.DisplayState) => {
 
     const animationValue = useDerivedValue(() => {
-        return props.SplashImage
+        return props.HeaderLarge
             ? withTiming(1, { duration: SCU.DURATION })
             : withTiming(0, { duration: SCU.DURATION });
     }, [props]);
@@ -20,13 +20,18 @@ export const imageSplashAnimatedStyles = (props: LSU.DisplayState) => {
     });
 
     return animationOutput;
-    
+
 };
 
-export const splashStyles = StyleSheet.create({
-    imageSplash: {
-        width: "100%",
-        height: "100%",
-        resizeMode: "contain",
+export const headerLargeStyles = StyleSheet.create({
+    textHeaderLarge: {
+        width: '100%',
+        fontSize: 72,
+        fontFamily: 'Poppins-SemiBoldItalic',
+        textAlign: 'center',
+        textShadowColor: 'rgba(0, 0, 0, 0.2)',
+        textShadowOffset: { width: 5, height: 6 },
+        textShadowRadius: 10,
+        color: SCU.COLORS.GOLD,
     },
 });

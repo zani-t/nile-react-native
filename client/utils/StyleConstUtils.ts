@@ -4,8 +4,9 @@ export const COLORS = {
     WHITE: '#ffffff',
     GOLD: '#ffbb1a',
     BLUE: '#1756f8',
-    GREEN: '#004b3e',
     DARK_GREEN: '#003c32',
+    GREEN: '#004b3e',
+    LIGHT_GREEN: '#c7d8d4',
 };
 
 export const DURATION = 750;

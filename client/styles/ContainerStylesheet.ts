@@ -1,9 +1,9 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 import { interpolateColor, useAnimatedStyle, useDerivedValue, withTiming } from 'react-native-reanimated';
 
-import * as LSU from "./../utils/LayoutStateUtils";
-import * as SCU from "./../utils/StyleConstUtils";
+import * as LSU from './../utils/LayoutStateUtils';
+import * as SCU from './../utils/StyleConstUtils';
 
 export const viewContainerAnimatedStyles = (props: LSU.ComponentProps) => {
 
@@ -11,13 +11,14 @@ export const viewContainerAnimatedStyles = (props: LSU.ComponentProps) => {
     const initial = { backgroundColor: LSU.LayoutState.get(props.states.initialState).container.color, };
     const target = { backgroundColor: LSU.LayoutState.get(props.states.targetState).container.color, };
 
+    // If new target set -> return 1
     const animationValue = useDerivedValue(() => {
-        // If new target set -> return opposite value of toggle
         return props.states.initialState === props.states.targetState
             ? withTiming(0, { duration: SCU.DURATION })
             : withTiming(1, { duration: SCU.DURATION });
     }, [props]);
 
+    // Interpolate container background color
     const animationOutput = useAnimatedStyle(() => {
         return {
             backgroundColor: interpolateColor(
@@ -27,9 +28,8 @@ export const viewContainerAnimatedStyles = (props: LSU.ComponentProps) => {
             ),
         };
     });
-    
-    return animationOutput;
 
+    return animationOutput;
 };
 
 export const containerStyles = StyleSheet.create({

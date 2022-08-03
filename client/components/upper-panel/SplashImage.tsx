@@ -3,7 +3,9 @@ import React, { useEffect } from 'react';
 import * as Font from 'expo-font';
 import Animated from 'react-native-reanimated';
 
-import * as LSU from "./../../utils/LayoutStateUtils";
+import * as LSU from './../../utils/LayoutStateUtils';
+import * as SCU from './../../utils/StyleConstUtils';
+
 import { imageSplashAnimatedStyles, splashStyles } from '../../styles/upper-panel/SplashImageStylesheet';
 
 const SplashImage: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) => {
@@ -11,6 +13,7 @@ const SplashImage: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) =>
     const SPLASH_IMG = require("./../../assets/hb-logo.png");
 
     useEffect(() => {
+
         // Opening sequence: Load fonts, check for auth token -> Navigate to auth/home
         async function openingSequence() {
             try {
@@ -36,20 +39,23 @@ const SplashImage: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) =>
             } catch (error) {
                 console.log(`SplashImage openingSequence error ${error}`);
             } finally {
-                //console.log('wait 1s');
                 await new Promise(resolve => setTimeout(resolve, 1000));
 
                 // Hide splash image
                 props.states.setDisplayState(LSU.HiddenDisplayState);
-                //console.log('hide all');
-                await new Promise(resolve => setTimeout(resolve, 750));
+                
+                await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
 
                 // Begin transition to auth
                 props.states.setTargetState('AUTH');
-                //console.log('set target');
+                await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
+                
+                props.states.setInitialState('AUTH');
             };
         };
+
         openingSequence();
+
     }, []);
 
     return (
@@ -58,7 +64,7 @@ const SplashImage: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) =>
             style={[
                 splashStyles.imageSplash,
                 imageSplashAnimatedStyles(props.states.displayState),]}/>
-    )
+    );
 
 };
 
