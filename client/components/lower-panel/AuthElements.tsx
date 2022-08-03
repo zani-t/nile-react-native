@@ -2,27 +2,37 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Keyboard, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import Animated from 'react-native-reanimated';
+import jwtDecode from 'jwt-decode';
 
 import * as LSU from './../../utils/LayoutStateUtils';
 import * as SCU from './../../utils/StyleConstUtils';
+import axiosStatic from '../../utils/AxiosStatic';
+import { AuthContext } from '../../context/AuthContext';
 import { authElementsAnimatedStyles, authElementsStyles } from '../../styles/lower-panel/AuthElementsStylesheet';
 
 const AuthElements: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) => {
 
-    // [Authentication context]
+    const authContext = useContext(AuthContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const signInSequence = async () => {
         try {
-            // [Get auth tokens]
+            // Get authentication tokens
+            const response = await axiosStatic.post('token/', {
+                username: 'zani',
+                password: 'adminpassword',
+            });
+            authContext?.setAuthState({
+                user: jwtDecode(response.data.access),
+                authTokens: response.data,
+            });
         } catch (error) {
             console.log(`AuthElements signInSequence error ${error}`);
         } finally {
             // Hide elements
             props.states.setDisplayState(LSU.HiddenDisplayState);
             await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
-
             // Transition to home
             props.states.setTargetState('HOME');
             await new Promise(resolve => setTimeout(resolve, SCU.DURATION));

@@ -6,11 +6,29 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import * as LSU from './../../utils/LayoutStateUtils';
 import * as SCU from './../../utils/StyleConstUtils';
+import AxiosDynamic from '../../utils/AxiosDynamic';
+import axiosStatic from '../../utils/AxiosStatic';
 import { linkInputAnimatedStyles, linkInputStyles } from '../../styles/lower-panel/LinkInputStylesheet';
 
 const LinkInput: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) => {
 
+    // Keyboard listener needs to be able to switch to multiple panel states!
+
+    const axiosDynamic = AxiosDynamic();
     const [link, setLink] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const querySequence = async () => {
+        // Get queried article
+        const response = await axiosDynamic.post('query/', { url: link, });
+        props.states.setQueriedArticle(response.data);
+        Keyboard.dismiss();
+
+        props.states.setTargetState('QUERY'); // begin transition
+        props.states.setDisplayState(LSU.QueryDisplayState);
+        await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
+        props.states.setInitialState('QUERY');
+    };
 
     // On opening keyboard: Hide stored headline, set target state to HomeInput
     const openKeyboardSequence = async () => {
@@ -30,6 +48,7 @@ const LinkInput: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) => {
         props.states.setDisplayState(LSU.HomeDisplayState);
     };
 
+    // Initialize keyboard listener
     useEffect(() => {
         const keyboardListener = Keyboard.addListener("keyboardDidHide", async () => {
             closeKeyboardSequence();
@@ -50,7 +69,9 @@ const LinkInput: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) => {
                 onFocus={() => openKeyboardSequence()}
                 onChangeText={text => setLink(text)}
                 value={link} />
-            <TouchableOpacity style={linkInputStyles.iconEnterLink}>
+            <TouchableOpacity
+                style={linkInputStyles.iconEnterLink}
+                onPress={() => querySequence()}>
                 <MaterialCommunityIcons
                     name="pencil-plus"
                     size={20}

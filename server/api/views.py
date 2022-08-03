@@ -31,7 +31,7 @@ class MyTokenObtainPairView(TokenObtainPairView):
 # Article Retrieval
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def getNotes(request):
+def getArticles(request):
     user = request.user
     articles = user.article_set.all()
     serializer = ArticleSerializer(articles, many=True)

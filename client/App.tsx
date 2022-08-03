@@ -21,13 +21,16 @@ import AuthElements from './components/lower-panel/AuthElements';
 import PanelButtons from './components/lower-panel/PanelButtons';
 import LinkInput from './components/lower-panel/LinkInput';
 import HeaderSmall from './components/upper-panel/HeaderSmall';
+import QueriedHeadline from "./components/lower-panel/QueriedHeadline";
+
 
 export default function App() {
 
     const [initialState, setInitialState] = useState<LSU.PanelState>('SPLASH');
     const [targetState, setTargetState] = useState<LSU.PanelState>('SPLASH');
     const [displayState, setDisplayState] = useState<LSU.DisplayState>(LSU.SplashDisplayState);
-    // const [articles, setArticles] = useState(null);
+    const [articles, setArticles] = useState<LSU.Article[]>([]);
+    const [queriedArticle, setQueriedArticle] = useState<LSU.Article | null>(null);
 
     const getStates = () => {
         return {
@@ -35,9 +38,13 @@ export default function App() {
                 initialState: initialState,
                 targetState: targetState,
                 displayState: displayState,
+                articles: articles,
+                queriedArticle: queriedArticle,
                 setInitialState: setInitialState,
                 setTargetState: setTargetState,
                 setDisplayState: setDisplayState,
+                setArticles: setArticles,
+                setQueriedArticle: setQueriedArticle,
             },
         };
     };
@@ -58,7 +65,9 @@ export default function App() {
                         <SplashImage states={getStates().states} />}
                     {initialState === 'AUTH' &&
                         <HeaderLarge states={getStates().states} />}
-                    {(initialState === 'HOME' || initialState === 'HOME_INPUT') &&
+                    {(initialState === 'HOME'
+                        || initialState === 'HOME_INPUT'
+                        || initialState === 'QUERY') &&
                         <HeaderSmall states={getStates().states} />}
 
                 </UpperPanel>
@@ -74,9 +83,12 @@ export default function App() {
 
                     {(initialState === 'AUTH' || initialState === 'AUTH_INPUT') &&
                         <AuthElements states={getStates().states} />}
-                    {(initialState === 'HOME' || initialState === 'HOME_INPUT') &&
+                    {(initialState === 'HOME'
+                        || initialState === 'HOME_INPUT'
+                        || initialState === 'QUERY') &&
                         <>
                             <PanelButtons states={getStates().states} />
+                            <QueriedHeadline states={getStates().states} />
                             <LinkInput states={getStates().states} />
                         </>}
 
