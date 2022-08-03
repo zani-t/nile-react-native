@@ -19,8 +19,6 @@ const AuthElements: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) =
         } catch (error) {
             console.log(`AuthElements signInSequence error ${error}`);
         } finally {
-            // [Close keyboard]
-
             // Hide elements
             props.states.setDisplayState(LSU.HiddenDisplayState);
             await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
@@ -32,13 +30,33 @@ const AuthElements: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) =
         };
     };
 
+    // On opening keyboard: Hide header, set target state to AuthInput
+    const openKeyboardSequence = async () => {
+        props.states.setDisplayState(LSU.AuthInputDisplayState);
+        props.states.setTargetState('AUTH_INPUT');
+        await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
+        props.states.setInitialState('AUTH_INPUT');
+    };
+
+    // On closing keyboard: Set target to auth, hide keyboard,
+    // ...set initial (allow header to display), display header
+    const closeKeyboardSequence = async () => {
+        props.states.setTargetState('AUTH');
+        Keyboard.dismiss();
+        await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
+        props.states.setInitialState('AUTH');
+        props.states.setDisplayState(LSU.AuthDisplayState);
+    };
+
     useEffect(() => {
         async function openingSequence() {
             props.states.setDisplayState(LSU.AuthDisplayState);
         };
         openingSequence();
-
-        // Keyboard listener
+        const keyboardListener = Keyboard.addListener("keyboardDidHide", async () => {
+            closeKeyboardSequence();
+        });
+        return () => { keyboardListener.remove(); };
     }, []);
 
     return (
@@ -52,7 +70,7 @@ const AuthElements: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) =
                 keyboardType='email-address'
                 placeholderTextColor={SCU.COLORS.LIGHT_GREEN}
                 placeholder=' Email . . .'
-                // onFocus={() => [Set target state, initial state to AUTH_INPUT]}
+                onFocus={() => openKeyboardSequence()}
                 onChangeText={current_text => setEmail(current_text)}
                 value={email} />
             <TextInput
@@ -60,7 +78,7 @@ const AuthElements: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) =
                 autoCapitalize="none"
                 placeholderTextColor='#c7d8d4'
                 placeholder=" Password . . ."
-                // onFocus={() => [Set target state, initial state to AUTH_INPUT]}
+                onFocus={() => openKeyboardSequence()}
                 onChangeText={current_text => setPassword(current_text)}
                 value={password}
                 secureTextEntry />

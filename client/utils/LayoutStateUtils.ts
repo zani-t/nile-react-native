@@ -65,6 +65,22 @@ LayoutState.set('AUTH', {
     },
 });
 
+LayoutState.set('AUTH_INPUT', {
+    container: {
+        color: SCU.COLORS.GREEN
+    },
+    upper: {
+        height: SCU.HEIGHT * 0.20,
+    },
+    center: {
+        height: SCU.HEIGHT * 0.00,
+    },
+    lower: {
+        height: SCU.HEIGHT * 0.78,
+        color: SCU.COLORS.DARK_GREEN,
+    },
+});
+
 LayoutState.set('HOME', {
     container: {
         color: SCU.COLORS.GREEN
@@ -77,6 +93,22 @@ LayoutState.set('HOME', {
     },
     lower: {
         height: SCU.HEIGHT * 0.42,
+        color: SCU.COLORS.WHITE,
+    },
+});
+
+LayoutState.set('HOME_INPUT', {
+    container: {
+        color: SCU.COLORS.GREEN
+    },
+    upper: {
+        height: SCU.HEIGHT * 0.37,
+    },
+    center: {
+        height: SCU.HEIGHT * 0.00,
+    },
+    lower: {
+        height: SCU.HEIGHT * 0.63,
         color: SCU.COLORS.WHITE,
     },
 });
@@ -110,11 +142,26 @@ export const AuthDisplayState: DisplayState = {
     AuthElements: true,
 };
 
+// PanelState === 'AuthInput'
+export const AuthInputDisplayState: DisplayState = {
+    ...HiddenDisplayState,
+    AuthElements: true,
+};
+
 // PanelState === 'Home'
 export const HomeDisplayState: DisplayState = {
     ...HiddenDisplayState,
     HeaderSmall: true,
     StoredHeadline: true,
+    PanelButtons: true,
+    LinkInput: true,
+    ExtraHeadlines: true,
+};
+
+// PanelState === 'HomeInput'
+export const HomeInputDisplayState: DisplayState = {
+    ...HiddenDisplayState,
+    HeaderSmall: true,
     PanelButtons: true,
     LinkInput: true,
     ExtraHeadlines: true,

@@ -30,7 +30,7 @@ export const linkInputStyles = StyleSheet.create({
         marginTop: '6%',
         marginBottom: '2%',
         paddingHorizontal: '4%',
-        height: '13%',
+        height: SCU.HEIGHT * 0.37 * 0.13,
         width: '88%',
         borderRadius: 10,
         backgroundColor: SCU.COLORS.GRAY,
@@ -39,10 +39,10 @@ export const linkInputStyles = StyleSheet.create({
     textInputLink: {
         width: '100%',
         fontSize: 15,
-        textShadowColor: 'rgba(0, 0, 0, 0.3)',
-        textShadowOffset: { width: 2, height: 2 },
+        textShadowColor: 'rgba(0, 0, 0, 0.03)',
+        textShadowOffset: { width: 1, height: 1 },
         textShadowRadius: 2,
-        color: SCU.COLORS.LIGHT_GRAY,
+        color: '#222',
     },
     
     iconEnterLink: {

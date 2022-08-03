@@ -2,8 +2,8 @@ import { StyleSheet, ViewStyle } from 'react-native';
 
 import { interpolate, useAnimatedStyle, useDerivedValue, withTiming } from 'react-native-reanimated';
 
-import * as LSU from './../../utils/LayoutStateUtils';
-import * as SCU from './../../utils/StyleConstUtils';
+import * as LSU from '../utils/LayoutStateUtils';
+import * as SCU from '../utils/StyleConstUtils';
 
 export const viewUpperAnimatedStyles = (props: LSU.ComponentProps) => {
 
@@ -41,6 +41,7 @@ export const viewUpperConditionalStyles = (props: LSU.PanelState) => {
             conditionalStyle.marginTop = '5%';
             break;
         case 'AUTH':
+        case 'AUTH_INPUT':
             conditionalStyle.justifyContent = 'center';
             break;
     }

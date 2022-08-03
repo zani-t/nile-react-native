@@ -9,18 +9,18 @@ import * as LSU from './utils/LayoutStateUtils';
 import { containerStyles, viewContainerAnimatedStyles } from './styles/ContainerStylesheet';
 
 import UpperPanel from './components/upper-panel/UpperPanel';
-import { upperPanelStyles, viewUpperAnimatedStyles, viewUpperConditionalStyles } from './styles/upper-panel/UpperPanelStylesheet';
+import { upperPanelStyles, viewUpperAnimatedStyles, viewUpperConditionalStyles } from './styles/UpperPanelStylesheet';
 import SplashImage from './components/upper-panel/SplashImage';
 import HeaderLarge from './components/upper-panel/HeaderLarge';
 
 import CenterPanel from './components/upper-panel/UpperPanel';
 
 import LowerPanel from './components/upper-panel/UpperPanel';
-import { lowerPanelStyles, viewLowerAnimatedStyles, viewLowerConditionalStyles } from './styles/lower-panel/LowerPanelStylesheet';
+import { lowerPanelStyles, viewLowerAnimatedStyles, viewLowerConditionalStyles } from './styles/LowerPanelStylesheet';
 import AuthElements from './components/lower-panel/AuthElements';
 import PanelButtons from './components/lower-panel/PanelButtons';
-import LinkInput from "./components/lower-panel/LinkInput";
-import HeaderSmall from "./components/upper-panel/HeaderSmall";
+import LinkInput from './components/lower-panel/LinkInput';
+import HeaderSmall from './components/upper-panel/HeaderSmall';
 
 export default function App() {
 
@@ -58,7 +58,7 @@ export default function App() {
                         <SplashImage states={getStates().states} />}
                     {initialState === 'AUTH' &&
                         <HeaderLarge states={getStates().states} />}
-                    {initialState === 'HOME' &&
+                    {(initialState === 'HOME' || initialState === 'HOME_INPUT') &&
                         <HeaderSmall states={getStates().states} />}
 
                 </UpperPanel>
@@ -72,12 +72,13 @@ export default function App() {
                     viewLowerAnimatedStyles(getStates()),
                     viewLowerConditionalStyles(targetState)]}>
 
-                    {initialState === 'AUTH' &&
+                    {(initialState === 'AUTH' || initialState === 'AUTH_INPUT') &&
                         <AuthElements states={getStates().states} />}
-                    {initialState === 'HOME' &&
-                        <PanelButtons states={getStates().states} />}
-                    {initialState === 'HOME' &&
-                        <LinkInput states={getStates().states} />}
+                    {(initialState === 'HOME' || initialState === 'HOME_INPUT') &&
+                        <>
+                            <PanelButtons states={getStates().states} />
+                            <LinkInput states={getStates().states} />
+                        </>}
 
                 </LowerPanel>
 
@@ -86,5 +87,5 @@ export default function App() {
 
         </AuthProvider>
     );
-    
+
 };

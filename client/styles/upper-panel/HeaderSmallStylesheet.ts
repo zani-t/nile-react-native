@@ -24,7 +24,7 @@ export const headerSmallAnimatedStyles = (props: LSU.DisplayState) => {
 
 export const headerSmallStyles = StyleSheet.create({
     viewHeaderSmall: {
-        height: '18%',
+        height: SCU.HEIGHT * 0.18,
         paddingLeft: '5%',
     },
     viewHeaderInline: {

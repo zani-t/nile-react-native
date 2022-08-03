@@ -1,8 +1,8 @@
 import { Dimensions } from 'react-native';
 
 export const COLORS = {
+    DARK_GRAY: '#b7b7b7',
     GRAY: '#eeeeee',
-    LIGHT_GRAY: '#b7b7b7',
     WHITE: '#ffffff',
     GOLD: '#ffbb1a',
     BLUE: '#1756f8',
@@ -11,7 +11,7 @@ export const COLORS = {
     LIGHT_GREEN: '#c7d8d4',
 };
 
-export const DURATION = 750;
+export const DURATION = 687;
 
 const { height, width } = Dimensions.get('window');
 

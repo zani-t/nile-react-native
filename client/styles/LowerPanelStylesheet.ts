@@ -2,8 +2,8 @@ import { StyleSheet, ViewStyle } from 'react-native';
 
 import { interpolate, interpolateColor, useAnimatedStyle, useDerivedValue, withTiming } from 'react-native-reanimated';
 
-import * as LSU from './../../utils/LayoutStateUtils';
-import * as SCU from './../../utils/StyleConstUtils';
+import * as LSU from '../utils/LayoutStateUtils';
+import * as SCU from '../utils/StyleConstUtils';
 
 export const viewLowerAnimatedStyles = (props: LSU.ComponentProps) => {
 
@@ -49,6 +49,7 @@ export const viewLowerConditionalStyles = (props: LSU.PanelState) => {
     let conditionalStyle: ViewStyle = {};
     switch (props) {
         case 'AUTH':
+        case 'AUTH_INPUT':
             conditionalStyle.paddingTop = '12%';
         default:
             return conditionalStyle;
