@@ -9,29 +9,32 @@ import * as LSU from './utils/LayoutStateUtils';
 import { containerStyles, viewContainerAnimatedStyles } from './styles/ContainerStylesheet';
 
 import UpperPanel from './components/upper-panel/UpperPanel';
+import { upperPanelStyles, viewUpperAnimatedStyles, viewUpperConditionalStyles } from './styles/upper-panel/UpperPanelStylesheet';
 import SplashImage from './components/upper-panel/SplashImage';
 import HeaderLarge from './components/upper-panel/HeaderLarge';
+
 import CenterPanel from './components/upper-panel/UpperPanel';
+
 import LowerPanel from './components/upper-panel/UpperPanel';
-import { upperPanelStyles, viewUpperAnimatedStyles, viewUpperConditionalStyles } from "./styles/upper-panel/UpperPanelStylesheet";
-import { lowerPanelStyles, viewLowerAnimatedStyles, viewLowerConditionalStyles } from "./styles/lower-panel/LowerPanelStylesheet";
-import AuthElements from "./components/lower-panel/AuthElements";
+import { lowerPanelStyles, viewLowerAnimatedStyles, viewLowerConditionalStyles } from './styles/lower-panel/LowerPanelStylesheet';
+import AuthElements from './components/lower-panel/AuthElements';
+import PanelButtons from './components/lower-panel/PanelButtons';
+import LinkInput from "./components/lower-panel/LinkInput";
+import HeaderSmall from "./components/upper-panel/HeaderSmall";
 
 export default function App() {
 
-    // const [animationToggle, setAnimationToggle] = useState(0);
     const [initialState, setInitialState] = useState<LSU.PanelState>('SPLASH');
     const [targetState, setTargetState] = useState<LSU.PanelState>('SPLASH');
     const [displayState, setDisplayState] = useState<LSU.DisplayState>(LSU.SplashDisplayState);
+    // const [articles, setArticles] = useState(null);
 
     const getStates = () => {
         return {
             states: {
-                // animToggle: animationToggle,
                 initialState: initialState,
                 targetState: targetState,
                 displayState: displayState,
-                // setAnimToggle: setAnimationToggle,
                 setInitialState: setInitialState,
                 setTargetState: setTargetState,
                 setDisplayState: setDisplayState,
@@ -55,6 +58,8 @@ export default function App() {
                         <SplashImage states={getStates().states} />}
                     {initialState === 'AUTH' &&
                         <HeaderLarge states={getStates().states} />}
+                    {initialState === 'HOME' &&
+                        <HeaderSmall states={getStates().states} />}
 
                 </UpperPanel>
 
@@ -69,6 +74,10 @@ export default function App() {
 
                     {initialState === 'AUTH' &&
                         <AuthElements states={getStates().states} />}
+                    {initialState === 'HOME' &&
+                        <PanelButtons states={getStates().states} />}
+                    {initialState === 'HOME' &&
+                        <LinkInput states={getStates().states} />}
 
                 </LowerPanel>
 

@@ -13,7 +13,6 @@ const SplashImage: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) =>
     const SPLASH_IMG = require("./../../assets/hb-logo.png");
 
     useEffect(() => {
-
         // Opening sequence: Load fonts, check for auth token -> Navigate to auth/home
         async function openingSequence() {
             try {
@@ -43,19 +42,15 @@ const SplashImage: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) =>
 
                 // Hide splash image
                 props.states.setDisplayState(LSU.HiddenDisplayState);
-                
                 await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
 
-                // Begin transition to auth
+                // Transition to auth
                 props.states.setTargetState('AUTH');
                 await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
-                
                 props.states.setInitialState('AUTH');
             };
         };
-
         openingSequence();
-
     }, []);
 
     return (

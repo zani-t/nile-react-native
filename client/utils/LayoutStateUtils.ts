@@ -21,11 +21,9 @@ export type DisplayState = {
 // All hook variables sent to components
 export type ComponentProps = {
     states: {
-        // animToggle: number,
         initialState: PanelState,
         targetState: PanelState,
         displayState: DisplayState,
-        // setAnimToggle: React.Dispatch<React.SetStateAction<number>>,
         setInitialState: React.Dispatch<React.SetStateAction<PanelState>>,
         setTargetState: React.Dispatch<React.SetStateAction<PanelState>>,
         setDisplayState: React.Dispatch<React.SetStateAction<DisplayState>>,
@@ -99,15 +97,25 @@ export const HiddenDisplayState: DisplayState = {
     ListedHeadlines: false,
 };
 
-// PanelState === 'SPLASH' -> SplashImage showing
+// PanelState === 'SPLASH'
 export const SplashDisplayState: DisplayState = {
     ...HiddenDisplayState,
     SplashImage: true,
 };
 
-// PanelState === 'Auth' -> SplashImage showing
+// PanelState === 'Auth'
 export const AuthDisplayState: DisplayState = {
     ...HiddenDisplayState,
     HeaderLarge: true,
     AuthElements: true,
+};
+
+// PanelState === 'Home'
+export const HomeDisplayState: DisplayState = {
+    ...HiddenDisplayState,
+    HeaderSmall: true,
+    StoredHeadline: true,
+    PanelButtons: true,
+    LinkInput: true,
+    ExtraHeadlines: true,
 };
