@@ -1,20 +1,43 @@
 import { StyleSheet } from 'react-native';
-import { useAnimatedStyle, useDerivedValue, withTiming, } from 'react-native-reanimated';
+import { interpolateColor, useAnimatedStyle, useDerivedValue, withTiming, } from 'react-native-reanimated';
 
 import * as LSU from './../../utils/LayoutStateUtils';
 import * as SCU from './../../utils/StyleConstUtils';
 
 export const linkInputAnimatedStyles = (props: LSU.DisplayState) => {
 
-    const animationValue = useDerivedValue(() => {
+    const opacityValue = useDerivedValue(() => {
         return props.LinkInput
             ? withTiming(1, { duration: SCU.DURATION })
             : withTiming(0, { duration: SCU.DURATION });
     }, [props]);
 
+    const borderWidthValue = useDerivedValue(() => {
+        return props.LinkInputMode === 'SET_LINK'
+            ? withTiming(0, { duration: SCU.DURATION })
+            : withTiming(1, { duration: SCU.DURATION });
+    });
+
+    const borderColorValue = useDerivedValue(() => {
+        switch (props.LinkInputMode) {
+            case 'ERROR':
+                return withTiming(0, { duration: SCU.DURATION });
+            case 'SET_LINK':
+                return withTiming(1, { duration: SCU.DURATION });
+            case 'SET_CATEGORY':
+                return withTiming(2, { duration: SCU.DURATION });
+        };
+    }, [props]);
+
     const animationOutput = useAnimatedStyle(() => {
         return {
-            opacity: animationValue.value,
+            opacity: opacityValue.value,
+            borderWidth: borderWidthValue.value,
+            borderColor: interpolateColor(
+                borderColorValue.value,
+                [0, 1, 2],
+                [SCU.COLORS.LIGHT_RED, SCU.COLORS.GRAY, SCU.COLORS.LIGHT_GREEN],
+            ),
         };
     });
 
@@ -45,7 +68,7 @@ export const linkInputStyles = StyleSheet.create({
         textShadowRadius: 2,
         color: '#222',
     },
-    
+
     iconEnterLink: {
         justifyContent: 'center',
         transform: [{ translateX: -18 }],

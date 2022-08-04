@@ -9,6 +9,7 @@ export const COLORS = {
     DARK_GREEN: '#003c32',
     GREEN: '#004b3e',
     LIGHT_GREEN: '#c7d8d4',
+    LIGHT_RED: '#fac7c7',
 };
 
 export const DURATION = 687;

@@ -11,6 +11,9 @@ export interface Article {
 // All states for panel configuration
 export type PanelState = 'SPLASH' | 'AUTH' | 'AUTH_INPUT' | 'QUERY' | 'HOME' | 'HOME_INPUT' | 'SORT';
 
+// All states from home page input
+export type InputState = 'SET_LINK' | 'SET_CATEGORY' | 'ERROR';
+
 // All components (showing/hidden)
 export type DisplayState = {
     SplashImage: boolean,
@@ -19,9 +22,11 @@ export type DisplayState = {
     HeaderSmall: boolean,
     StoredHeadline: boolean,
     StoredHeadlineText: boolean,
+    QueryContainer: boolean,
     QueriedHeadline: boolean,
     PanelButtons: boolean,
     LinkInput: boolean,
+    LinkInputMode: InputState,
     ExtraHeadlines: boolean,
     Categories: boolean,
     ListedHeadlines: boolean,
@@ -151,9 +156,11 @@ export const HiddenDisplayState: DisplayState = {
     HeaderSmall: false,
     StoredHeadline: false,
     StoredHeadlineText: false,
+    QueryContainer: false,
     QueriedHeadline: false,
     PanelButtons: false,
     LinkInput: false,
+    LinkInputMode: 'SET_LINK',
     ExtraHeadlines: false,
     Categories: false,
     ListedHeadlines: false,
@@ -203,7 +210,7 @@ export const HomeInputDisplayState: DisplayState = {
 export const QueryDisplayState: DisplayState = {
     ...HiddenDisplayState,
     HeaderSmall: true,
-    QueriedHeadline: true,
+    QueryContainer: true,
     PanelButtons: true,
     LinkInput: true,
     ExtraHeadlines: true,

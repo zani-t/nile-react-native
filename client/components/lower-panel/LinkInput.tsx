@@ -13,22 +13,11 @@ import { linkInputAnimatedStyles, linkInputStyles } from '../../styles/lower-pan
 const LinkInput: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) => {
 
     // Keyboard listener needs to be able to switch to multiple panel states!
+    // [Keep app state variable in component file & pass as value into dismiss sequence]
 
     const axiosDynamic = AxiosDynamic();
     const [link, setLink] = useState('');
-    const [loading, setLoading] = useState(false);
-
-    const querySequence = async () => {
-        // Get queried article
-        const response = await axiosDynamic.post('query/', { url: link, });
-        props.states.setQueriedArticle(response.data);
-        Keyboard.dismiss();
-
-        props.states.setTargetState('QUERY'); // begin transition
-        props.states.setDisplayState(LSU.QueryDisplayState);
-        await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
-        props.states.setInitialState('QUERY');
-    };
+    const [savedLink, setSavedLink] = useState('');
 
     // On opening keyboard: Hide stored headline, set target state to HomeInput
     const openKeyboardSequence = async () => {
@@ -48,13 +37,46 @@ const LinkInput: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) => {
         props.states.setDisplayState(LSU.HomeDisplayState);
     };
 
-    // Initialize keyboard listener
+    // When button pressed & input is on link query mode
+    const querySequence = async () => {
+        try {
+            // Get queried article from online
+            const response = await axiosDynamic.post('query/', { url: link, });
+            props.states.setQueriedArticle(response.data);
+            Keyboard.dismiss();
+
+            // Transition queried article and lower panel height, fade in content
+            props.states.setDisplayState(LSU.QueryDisplayState);
+            props.states.setTargetState('QUERY');
+            await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
+            props.states.setInitialState('QUERY');
+            props.states.setDisplayState({
+                ...LSU.QueryDisplayState,
+                QueriedHeadline: true,
+            });
+        } catch (error) {
+            console.log(`LinkInput querySequence query error ${error}`);
+            props.states.setDisplayState({
+                ...LSU.HomeDisplayState,
+                LinkInputMode: 'ERROR',
+            });
+        };
+    };
+
+    // Initialize keyboard listener on load
     useEffect(() => {
         const keyboardListener = Keyboard.addListener("keyboardDidHide", async () => {
             closeKeyboardSequence();
         });
         return () => { keyboardListener.remove(); };
     }, []);
+
+    // Empty input text after article is confirmed (transitioning from query to home)
+    useEffect(() => {
+        if (props.states.initialState === 'QUERY' && props.states.targetState === 'HOME') {
+            setLink('');
+        };
+    }, [(props.states)]);
 
     return (
         <Animated.View style={[

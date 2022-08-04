@@ -6,16 +6,19 @@ import * as SCU from './../../utils/StyleConstUtils';
 
 export const queriedHeadlineAnimatedStyles = (props: LSU.ComponentProps) => {
 
+    // when target state === query -> height goes up
+    // when queried headline on -> opacity goes up
+
     const opacityValue = useDerivedValue(() => {
-        return (props.states.initialState === 'QUERY' && props.states.targetState === 'QUERY')
+        return props.states.displayState.QueriedHeadline
             ? withTiming(1, { duration: SCU.DURATION })
             : withTiming(0, { duration: SCU.DURATION });
     }, [props]);
     
     const heightValue = useDerivedValue(() => {
-        return props.states.displayState.QueriedHeadline
-            ? withTiming(1, { duration: SCU.DURATION })
-            : withTiming(0, { duration: SCU.DURATION });
+        return props.states.displayState.QueryContainer
+            ? withTiming(1, { duration: 800 })
+            : withTiming(0, { duration: 800 });
     }, [props]);
 
     const animationOutput = useAnimatedStyle(() => {
