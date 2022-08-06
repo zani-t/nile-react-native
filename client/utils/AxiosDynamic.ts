@@ -15,7 +15,7 @@ const AxiosDynamic = () => {
     const axiosInstance = axios.create({
         baseURL: baseURL,
         headers:{
-            Authorization: `Bearer ${authContext?.authState.authTokens.access}`,
+            'Authorization': `Bearer ${authContext?.authState.authTokens.access}`,
             'Content-Type': 'application/json',
         },
     });

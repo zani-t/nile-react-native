@@ -119,6 +119,11 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
+JWT_AUTH = {
+    # Authorization:Token xxx
+    'JWT_AUTH_HEADER_PREFIX': 'Bearer ',
+}
+
 # CORS_ALLOWED_ORIGINS = [ ]
 CORS_ALLOW_ALL_ORIGINS = True
 

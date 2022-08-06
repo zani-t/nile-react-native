@@ -55,7 +55,7 @@ const LinkInput: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) => {
                 QueriedHeadline: true,
             });
         } catch (error) {
-            console.log(`LinkInput querySequence query error ${error}`);
+            console.log(`LinkInput querySequence ${error}`);
             props.states.setDisplayState({
                 ...LSU.HomeDisplayState,
                 LinkInputMode: 'ERROR',
