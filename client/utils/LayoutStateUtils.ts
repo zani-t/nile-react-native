@@ -51,8 +51,27 @@ export type ComponentProps = {
     },
 };
 
+// Panel stylesheet constants
+type StylesheetConfig = {
+    container: {
+        color: string,
+    },
+    upper: {
+        height: number,
+    } | ((newHeight: number) => {
+        height: number,
+    }),
+    center: {
+        height: number,
+    },
+    lower: {
+        height: number,
+        color: string,
+    },
+}
+
 // Layout configurations
-export let LayoutState = new Map();
+export let LayoutState = new Map<PanelState, StylesheetConfig>();
 
 LayoutState.set('SPLASH', {
     container: {
@@ -107,13 +126,13 @@ LayoutState.set('HOME', {
         color: SCU.COLORS.GREEN
     },
     upper: {
-        height: SCU.HEIGHT * 0.58,
+        height: SCU.HEIGHT * 0.565,
     },
     center: {
         height: SCU.HEIGHT * 0.00,
     },
     lower: {
-        height: SCU.HEIGHT * 0.42,
+        height: SCU.HEIGHT * 1,
         color: SCU.COLORS.WHITE,
     },
 });

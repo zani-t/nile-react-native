@@ -17,7 +17,7 @@ const QueriedHeadline: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps
             // Post to database
             await axiosDynamic.post('articles/', {
                 ...props.states.queriedArticle,
-                category: 'Unsorted'
+                category: 'Unsorted',
             });
 
             // Fade out content, transition queried content & panel height

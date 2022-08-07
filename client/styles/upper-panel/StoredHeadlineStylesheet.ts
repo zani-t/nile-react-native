@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { interpolate, useAnimatedStyle, useDerivedValue, withTiming, } from 'react-native-reanimated';
+import { useAnimatedStyle, useDerivedValue, withTiming, } from 'react-native-reanimated';
 
 import * as LSU from './../../utils/LayoutStateUtils';
 import * as SCU from './../../utils/StyleConstUtils';
@@ -44,9 +44,11 @@ export const storedHeadlineStyles = StyleSheet.create({
     viewStoredContainer: {
         paddingHorizontal: '6%',
         justifyContent: 'center',
+        flex: 0.97,
+        // backgroundColor: 'red'
     },
     viewImageContainer: {
-        marginTop: '2%',
+        // marginTop: '1%',
         shadowColor: 'rgba(0, 0, 0, 0.9)',
         shadowOffset: { width: 10, height: 10 },
         shadowRadius: 5,

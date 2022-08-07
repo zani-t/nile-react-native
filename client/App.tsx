@@ -31,6 +31,7 @@ import AuthElements from './components/lower-panel/AuthElements';
 import QueriedHeadline from './components/lower-panel/QueriedHeadline';
 import PanelButtons from './components/lower-panel/PanelButtons';
 import LinkInput from './components/lower-panel/LinkInput';
+import ExtraHeadlines from "./components/lower-panel/ExtraHeadlines";
 
 export default function App() {
 
@@ -103,12 +104,13 @@ export default function App() {
                             <PanelButtons states={getStates().states} />
                             <QueriedHeadline states={getStates().states} />
                             <LinkInput states={getStates().states} />
+                            <ExtraHeadlines states={getStates().states} />
                         </>}
 
                 </LowerPanel>
 
             </Animated.View>
-            <StatusBar style="light" />
+            <StatusBar style="light" translucent={true} />
 
         </AuthProvider>
     );

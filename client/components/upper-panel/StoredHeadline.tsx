@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 
-import Animated, { pow } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import dayjs from 'dayjs';
 import dayOfYear from 'dayjs/plugin/dayOfYear';
 
 import AxiosDynamic from '../../utils/AxiosDynamic';
 import * as LSU from './../../utils/LayoutStateUtils';
-import * as SCU from './../../utils/StyleConstUtils';
 import {
     storedHeadlineAnimatedStyles,
     viewContainerAnimatedStyles,
@@ -38,8 +37,8 @@ const StoredHeadline: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps)
         dayjs.extend(dayOfYear);
         if (!articleOfDay) {
             const articles = props.states.articles;
-            // setArticleOfDay(articles[dayjs().dayOfYear() % articles.length]);
-            setArticleOfDay(articles[2]);
+            setArticleOfDay(articles[(dayjs().dayOfYear() + 0) % articles.length]);
+            // setArticleOfDay(articles[2]);
         };
     }, [props])
 

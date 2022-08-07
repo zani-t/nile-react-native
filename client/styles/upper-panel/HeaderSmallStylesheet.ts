@@ -55,6 +55,6 @@ export const headerSmallStyles = StyleSheet.create({
         fontSize: 10,
         textShadowOffset: { width: 2, height: 2 },
         textShadowRadius: 2,
-        transform: [{ translateY: -7 }],
+        transform: [{ translateY: -8 }],
     },
 });
