@@ -7,7 +7,6 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as LSU from './../../utils/LayoutStateUtils';
 import * as SCU from './../../utils/StyleConstUtils';
 import AxiosDynamic from '../../utils/AxiosDynamic';
-import axiosStatic from '../../utils/AxiosStatic';
 import { linkInputAnimatedStyles, linkInputStyles } from '../../styles/lower-panel/LinkInputStylesheet';
 
 const LinkInput: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) => {
@@ -17,7 +16,6 @@ const LinkInput: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) => {
 
     const axiosDynamic = AxiosDynamic();
     const [link, setLink] = useState('');
-    const [savedLink, setSavedLink] = useState('');
 
     // On opening keyboard: Hide stored headline, set target state to HomeInput
     const openKeyboardSequence = async () => {
@@ -55,7 +53,7 @@ const LinkInput: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) => {
                 QueriedHeadline: true,
             });
         } catch (error) {
-            console.log(`LinkInput querySequence ${error}`);
+            console.log(`LinkInput.tsx querySequence ${error}`);
             props.states.setDisplayState({
                 ...LSU.HomeDisplayState,
                 LinkInputMode: 'ERROR',
@@ -73,25 +71,7 @@ const LinkInput: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) => {
 
     // Empty input text after article is confirmed (transitioning from query to home)
     useEffect(() => {
-        async function f () {
-            console.log('f');
-            try {
-                console.log(
-                    await axiosDynamic.post('articles/', {
-                        title: 'new title',
-                        img: 'img',
-                        source: 'source',
-                        category: 'category',
-                        url: 'url'
-                    })
-                );
-            } catch (error) {
-                console.log(`error ${error}`);
-            };
-        };
-
         if (props.states.initialState === 'QUERY' && props.states.targetState === 'HOME') {
-            f();
             setLink('');
         };
     }, [(props.states)]);

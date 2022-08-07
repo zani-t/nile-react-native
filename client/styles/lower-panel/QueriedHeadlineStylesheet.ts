@@ -39,6 +39,7 @@ export const queriedHeadlineAnimatedStyles = (props: LSU.ComponentProps) => {
 export const queriedHeadlineStyles = StyleSheet.create({
     viewQueryContainer: {
         paddingHorizontal: '7%',
+        justifyContent: 'center',
     },
     viewImageContainer: {
         marginTop: '4%',
@@ -52,6 +53,7 @@ export const queriedHeadlineStyles = StyleSheet.create({
     imageQuery: {
         width: '100%',
         aspectRatio: 1.6,
+        resizeMode: 'cover',
         borderRadius: 12,
     },
 

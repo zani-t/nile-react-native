@@ -1,11 +1,14 @@
 import * as SCU from './StyleConstUtils';
 
+// Article utils
 export interface Article {
-    title: string,
+    img: string,
     source: string,
-    category?: string,
-    image: string,
+    title: string,
     url: string,
+    category?: string,
+    id?: number,
+    user?: number,
 }
 
 // All states for panel configuration

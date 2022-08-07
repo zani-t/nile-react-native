@@ -3,32 +3,34 @@ import { Image, Text, TouchableOpacity, View } from 'react-native';
 
 import Animated from 'react-native-reanimated';
 import { queriedHeadlineAnimatedStyles, queriedHeadlineStyles } from '../../styles/lower-panel/QueriedHeadlineStylesheet';
+import AxiosDynamic from '../../utils/AxiosDynamic';
 
 import * as LSU from './../../utils/LayoutStateUtils';
 import * as SCU from './../../utils/StyleConstUtils';
 
 const QueriedHeadline: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) => {
 
+    const axiosDynamic = AxiosDynamic();
+
     const closingSequence = async () => {
+        try {
+            // Post to database
+            await axiosDynamic.post('articles/', {
+                ...props.states.queriedArticle,
+                category: 'Unsorted'
+            });
 
-        
-        // Fade out content, transition queried content & panel height
-        props.states.setDisplayState(LSU.QueryDisplayState);
-        await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
-        props.states.setDisplayState(LSU.HomeDisplayState);
-        props.states.setTargetState('HOME');
-        await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
-        props.states.setInitialState('HOME');
+            // Fade out content, transition queried content & panel height
+            props.states.setDisplayState(LSU.QueryDisplayState);
+            await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
+            props.states.setDisplayState(LSU.HomeDisplayState);
+            props.states.setTargetState('HOME');
+            await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
+            props.states.setInitialState('HOME');
+        } catch (error) {
+            console.log(`QueriedHeadline.tsx closingSequence error ${error}`);
+        }
     };
-
-    // On tap -> update state variable to: show link border, remove text, show text "Category: ", change padding
-    /* const setCategorySequence = async () => {
-        props.states.setDisplayState({
-            ...LSU.QueryDisplayState,
-            QueriedHeadline: true,
-            LinkInputMode: 'SET_CATEGORY',
-        });
-    }; */
 
     return (
         <Animated.View style={[
@@ -39,7 +41,7 @@ const QueriedHeadline: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps
                 <View style={queriedHeadlineStyles.viewImageContainer}>
                     <Image
                         style={queriedHeadlineStyles.imageQuery}
-                        source={{ uri: props.states.queriedArticle?.image }} />
+                        source={{ uri: props.states.queriedArticle?.img }} />
                 </View>
                 <Text style={queriedHeadlineStyles.textConfirm}>Confirm Article</Text>
                 <Text style={queriedHeadlineStyles.textQueryHeadline}>{props.states.queriedArticle?.title}</Text>

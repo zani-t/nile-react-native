@@ -9,20 +9,28 @@ import * as LSU from './utils/LayoutStateUtils';
 import { containerStyles, viewContainerAnimatedStyles } from './styles/ContainerStylesheet';
 
 import UpperPanel from './components/upper-panel/UpperPanel';
-import { upperPanelStyles, viewUpperAnimatedStyles, viewUpperConditionalStyles } from './styles/UpperPanelStylesheet';
+import {
+    upperPanelStyles,
+    viewUpperAnimatedStyles,
+    viewUpperConditionalStyles
+} from './styles/UpperPanelStylesheet';
 import SplashImage from './components/upper-panel/SplashImage';
 import HeaderLarge from './components/upper-panel/HeaderLarge';
+import HeaderSmall from './components/upper-panel/HeaderSmall';
+import StoredHeadline from './components/upper-panel/StoredHeadline';
 
 import CenterPanel from './components/upper-panel/UpperPanel';
 
 import LowerPanel from './components/upper-panel/UpperPanel';
-import { lowerPanelStyles, viewLowerAnimatedStyles, viewLowerConditionalStyles } from './styles/LowerPanelStylesheet';
+import {
+    lowerPanelStyles,
+    viewLowerAnimatedStyles,
+    viewLowerConditionalStyles
+} from './styles/LowerPanelStylesheet';
 import AuthElements from './components/lower-panel/AuthElements';
+import QueriedHeadline from './components/lower-panel/QueriedHeadline';
 import PanelButtons from './components/lower-panel/PanelButtons';
 import LinkInput from './components/lower-panel/LinkInput';
-import HeaderSmall from './components/upper-panel/HeaderSmall';
-import QueriedHeadline from "./components/lower-panel/QueriedHeadline";
-
 
 export default function App() {
 
@@ -49,6 +57,8 @@ export default function App() {
         };
     };
 
+    // 
+
     return (
         <AuthProvider>
 
@@ -68,7 +78,10 @@ export default function App() {
                     {(initialState === 'HOME'
                         || initialState === 'HOME_INPUT'
                         || initialState === 'QUERY') &&
-                        <HeaderSmall states={getStates().states} />}
+                        <>
+                            <HeaderSmall states={getStates().states} />
+                            <StoredHeadline states={getStates().states} />
+                        </>}
 
                 </UpperPanel>
 

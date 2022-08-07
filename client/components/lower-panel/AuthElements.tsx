@@ -24,7 +24,7 @@ const AuthElements: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) =
             };
             
             // Get authentication tokens
-            console.log({req_email, req_password})
+            // console.log({req_email, req_password})
             const response = await axiosStatic.post('token/', {
                 username: req_email,
                 password: req_password,
@@ -39,7 +39,7 @@ const AuthElements: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) =
             await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
             closeKeyboardSequence('HOME');
         } catch (error) {
-            console.log(`AuthElements.js signinSequence ${error}`);
+            console.log(`AuthElements.tsx signinSequence ${error}`);
             // Set field to red [& display type of error]
         };
     };
@@ -54,7 +54,7 @@ const AuthElements: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) =
             Keyboard.dismiss();
             signInSequence(email, password);
         } catch (error) {
-            console.log(`AuthElements.js registerSequence ${error}`);
+            console.log(`AuthElements.tsx registerSequence ${error}`);
             // Set field to red [& display type of error]
         }
     }

@@ -45,7 +45,7 @@ class ArticleView(APIView):
     def post(self, request, id=None):
         serializer = serializers.ArticleSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(user=request.user)
             return Response(serializer.data)
         else:
             print('error')
@@ -75,7 +75,7 @@ def query(request):
 
     article_info = {}
     article_info['title'] = new_article.title if new_article.title else 'NULL_TITLE'
-    article_info['image'] = new_article.top_image if new_article.top_image else 'NULL_IMG'
+    article_info['img'] = new_article.top_image if new_article.top_image else 'NULL_IMG'
     article_info['source'] = \
         newspaper.Source(new_article.source_url).brand.upper() \
         if newspaper.Source(new_article.source_url).brand \
