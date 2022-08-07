@@ -73,7 +73,25 @@ const LinkInput: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) => {
 
     // Empty input text after article is confirmed (transitioning from query to home)
     useEffect(() => {
+        async function f () {
+            console.log('f');
+            try {
+                console.log(
+                    await axiosDynamic.post('articles/', {
+                        title: 'new title',
+                        img: 'img',
+                        source: 'source',
+                        category: 'category',
+                        url: 'url'
+                    })
+                );
+            } catch (error) {
+                console.log(`error ${error}`);
+            };
+        };
+
         if (props.states.initialState === 'QUERY' && props.states.targetState === 'HOME') {
+            f();
             setLink('');
         };
     }, [(props.states)]);

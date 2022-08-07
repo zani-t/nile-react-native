@@ -8,7 +8,10 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('register/', views.RegisterView.as_view(), name='register_user'),
     
-    path('get_articles/', views.getArticles, name='get_articles'),
+    path('articles/', views.ArticleView.as_view(), name='articles'),
+    path('articles/<uuid:id>', views.ArticleView.as_view(), name='articles'),
 
     path('query/', views.query, name='query'),
+
+    path('test/', views.test)
 ]
