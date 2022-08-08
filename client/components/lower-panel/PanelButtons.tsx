@@ -6,16 +6,28 @@ import Animated from 'react-native-reanimated';
 
 import * as LSU from './../../utils/LayoutStateUtils';
 import * as SCU from './../../utils/StyleConstUtils';
+import AxiosDynamic from '../../utils/AxiosDynamic';
 import { panelButtonsAnimatedStyles, panelButtonsStyles } from '../../styles/lower-panel/PanelButtonsStylesheet';
 
 const PanelButtons: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) => {
 
-    useEffect(() => {
-        async function openingSequence() {
+    const axiosDynamic = AxiosDynamic();
+
+    const refreshSequence = async () => {
+        try {
+            // Get all of user's articles
+            props.states.setDisplayState({
+                ...LSU.HomeDisplayState,
+                ExtraHeadlines: false,
+            });
+            await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
+            const response = await axiosDynamic.get('articles/');
+            props.states.setArticles(response.data);
             props.states.setDisplayState(LSU.HomeDisplayState);
+        } catch (error) {
+            console.log(`StoredHeadline.tsx openingSequence ${error}`);
         };
-        openingSequence();
-    }, []);
+    };
 
     const closingSequence = async () => {
         // Hide elements
@@ -33,7 +45,7 @@ const PanelButtons: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) =
             panelButtonsStyles.viewButtonContainer,
             panelButtonsAnimatedStyles(props.states.displayState)]}>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={refreshSequence}>
                 <FontAwesome
                     name="refresh"
                     size={24}

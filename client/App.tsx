@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 import { StatusBar } from 'expo-status-bar';
 import Animated from 'react-native-reanimated';
@@ -9,11 +9,9 @@ import * as LSU from './utils/LayoutStateUtils';
 import { containerStyles, viewContainerAnimatedStyles } from './styles/ContainerStylesheet';
 
 import UpperPanel from './components/upper-panel/UpperPanel';
-import {
-    upperPanelStyles,
+import { upperPanelStyles,
     viewUpperAnimatedStyles,
-    viewUpperConditionalStyles
-} from './styles/UpperPanelStylesheet';
+    viewUpperConditionalStyles } from './styles/UpperPanelStylesheet';
 import SplashImage from './components/upper-panel/SplashImage';
 import HeaderLarge from './components/upper-panel/HeaderLarge';
 import HeaderSmall from './components/upper-panel/HeaderSmall';
@@ -22,11 +20,9 @@ import StoredHeadline from './components/upper-panel/StoredHeadline';
 import CenterPanel from './components/upper-panel/UpperPanel';
 
 import LowerPanel from './components/upper-panel/UpperPanel';
-import {
-    lowerPanelStyles,
+import { lowerPanelStyles,
     viewLowerAnimatedStyles,
-    viewLowerConditionalStyles
-} from './styles/LowerPanelStylesheet';
+    viewLowerConditionalStyles } from './styles/LowerPanelStylesheet';
 import AuthElements from './components/lower-panel/AuthElements';
 import QueriedHeadline from './components/lower-panel/QueriedHeadline';
 import PanelButtons from './components/lower-panel/PanelButtons';
@@ -57,8 +53,6 @@ export default function App() {
             },
         };
     };
-
-    // 
 
     return (
         <AuthProvider>

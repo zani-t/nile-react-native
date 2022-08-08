@@ -20,6 +20,7 @@ const LinkInput: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) => {
     // On opening keyboard: Hide stored headline, set target state to HomeInput
     const openKeyboardSequence = async () => {
         props.states.setDisplayState(LSU.HomeInputDisplayState);
+        await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
         props.states.setTargetState('HOME_INPUT');
         await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
         props.states.setInitialState('HOME_INPUT');

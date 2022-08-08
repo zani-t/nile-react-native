@@ -12,6 +12,8 @@ export const extraHeadlinesAnimatedStyles = (props: LSU.DisplayState) => {
             : withTiming(0, { duration: SCU.DURATION });
     }, [props]);
 
+    // console.log(animationValue.value);
+
     const animationOutput = useAnimatedStyle(() => {
         return {
             opacity: animationValue.value,

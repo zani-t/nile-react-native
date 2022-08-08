@@ -24,7 +24,6 @@ export type DisplayState = {
     AuthElements: boolean,
     HeaderSmall: boolean,
     StoredHeadline: boolean,
-    StoredHeadlineText: boolean,
     QueryContainer: boolean,
     QueriedHeadline: boolean,
     PanelButtons: boolean,
@@ -126,7 +125,7 @@ LayoutState.set('HOME', {
         color: SCU.COLORS.GREEN
     },
     upper: {
-        height: SCU.HEIGHT * 0.565,
+        height: SCU.HEIGHT * 0.56,
     },
     center: {
         height: SCU.HEIGHT * 0.00,
@@ -142,13 +141,13 @@ LayoutState.set('HOME_INPUT', {
         color: SCU.COLORS.GREEN
     },
     upper: {
-        height: SCU.HEIGHT * 0.37,
+        height: SCU.HEIGHT * 0.13,
     },
     center: {
         height: SCU.HEIGHT * 0.00,
     },
     lower: {
-        height: SCU.HEIGHT * 0.63,
+        height: SCU.HEIGHT * 0.87,
         color: SCU.COLORS.WHITE,
     },
 });
@@ -177,7 +176,6 @@ export const HiddenDisplayState: DisplayState = {
     AuthElements: false,
     HeaderSmall: false,
     StoredHeadline: false,
-    StoredHeadlineText: false,
     QueryContainer: false,
     QueriedHeadline: false,
     PanelButtons: false,
@@ -212,7 +210,6 @@ export const HomeDisplayState: DisplayState = {
     ...HiddenDisplayState,
     HeaderSmall: true,
     StoredHeadline: true,
-    StoredHeadlineText: true,
     PanelButtons: true,
     LinkInput: true,
     ExtraHeadlines: true,
@@ -222,7 +219,6 @@ export const HomeDisplayState: DisplayState = {
 export const HomeInputDisplayState: DisplayState = {
     ...HiddenDisplayState,
     HeaderSmall: true,
-    StoredHeadlineText: true,
     PanelButtons: true,
     LinkInput: true,
     ExtraHeadlines: true,

@@ -22,24 +22,6 @@ export const storedHeadlineAnimatedStyles = (props: LSU.DisplayState) => {
 
 };
 
-export const viewContainerAnimatedStyles = (props: LSU.DisplayState) => {
-
-    const animationValue = useDerivedValue(() => {
-        return props.StoredHeadlineText
-            ? withTiming(1, { duration: SCU.DURATION })
-            : withTiming(0, { duration: SCU.DURATION });
-    }, [props]);
-
-    const animationOutput = useAnimatedStyle(() => {
-        return {
-            opacity: animationValue.value,
-        };
-    });
-
-    return animationOutput;
-
-};
-
 export const storedHeadlineStyles = StyleSheet.create({
     viewStoredContainer: {
         paddingHorizontal: '6%',

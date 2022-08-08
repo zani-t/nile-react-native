@@ -52,7 +52,7 @@ export const viewUpperConditionalStyles = (props: LSU.PanelState) => {
 export const upperPanelStyles = StyleSheet.create({
     viewUpper: {
         width: '100%',
-        marginTop: '10%',
+        marginTop: '11%',
         // justifyContent: 'center',
     },
 });
