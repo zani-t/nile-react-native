@@ -12,6 +12,4 @@ urlpatterns = [
     path('articles/<uuid:id>', views.ArticleView.as_view(), name='articles'),
 
     path('query/', views.query, name='query'),
-
-    path('test/', views.test)
 ]

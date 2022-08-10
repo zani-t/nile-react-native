@@ -1,26 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useContext } from 'react';
 import { TouchableOpacity } from 'react-native';
 
-import { FontAwesome, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
+import * as SecureStore from 'expo-secure-store';
+import { Entypo, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import Animated from 'react-native-reanimated';
 
 import * as LSU from './../../utils/LayoutStateUtils';
 import * as SCU from './../../utils/StyleConstUtils';
 import AxiosDynamic from '../../utils/AxiosDynamic';
+import { AuthContext } from '../../context/AuthContext';
 import { panelButtonsAnimatedStyles, panelButtonsStyles } from '../../styles/lower-panel/PanelButtonsStylesheet';
 
 const PanelButtons: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) => {
 
     const axiosDynamic = AxiosDynamic();
+    const authContext = useContext(AuthContext);
 
     const refreshSequence = async () => {
         try {
-            // Get all of user's articles
             props.states.setDisplayState({
                 ...LSU.HomeDisplayState,
                 ExtraHeadlines: false,
             });
             await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
+
+            // Get all of user's articles
             const response = await axiosDynamic.get('articles/');
             props.states.setArticles(response.data);
             props.states.setDisplayState(LSU.HomeDisplayState);
@@ -29,7 +33,7 @@ const PanelButtons: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) =
         };
     };
 
-    const closingSequence = async () => {
+    const logoutSequence = async () => {
         // Hide elements
         props.states.setDisplayState(LSU.HiddenDisplayState);
         await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
@@ -38,6 +42,25 @@ const PanelButtons: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) =
         props.states.setTargetState('AUTH');
         await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
         props.states.setInitialState('AUTH');
+
+        authContext?.setAuthState({
+            user: null,
+            authTokens: null,
+        });
+        await SecureStore.deleteItemAsync('tokens');
+    };
+
+    const openSortSequence = async () => {
+        props.states.setDisplayState({
+            ...LSU.HomeDisplayState,
+            StoredHeadline: false,
+        });
+        await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
+
+        // Transition to sort
+        props.states.setTargetState('SORT');
+        await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
+        props.states.setInitialState('SORT');
     };
 
     return (
@@ -53,7 +76,7 @@ const PanelButtons: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) =
                     style={panelButtonsStyles.icon} />
 
             </TouchableOpacity>
-            <TouchableOpacity onPress={closingSequence}>
+            <TouchableOpacity onPress={logoutSequence}>
                 <FontAwesome5
                     name="bars"
                     size={25}
@@ -61,9 +84,9 @@ const PanelButtons: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) =
                     style={[panelButtonsStyles.icon, panelButtonsStyles.iconSettings]} />
             </TouchableOpacity>
             <TouchableOpacity>
-                <MaterialCommunityIcons
-                    name="bookmark-multiple-outline"
-                    size={24}
+                <Entypo onPress={openSortSequence}
+                    name="folder"
+                    size={25}
                     color={SCU.COLORS.GOLD}
                     style={panelButtonsStyles.icon} />
             </TouchableOpacity>

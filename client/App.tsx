@@ -18,6 +18,8 @@ import HeaderSmall from './components/upper-panel/HeaderSmall';
 import StoredHeadline from './components/upper-panel/StoredHeadline';
 
 import CenterPanel from './components/upper-panel/UpperPanel';
+import { centerPanelStyles, viewCenterAnimatedStyles, viewCenterConditionalStyles } from './styles/CenterPanelStylesheet';
+import Categories from './components/center-panel/Categories';
 
 import LowerPanel from './components/upper-panel/UpperPanel';
 import { lowerPanelStyles,
@@ -80,28 +82,34 @@ export default function App() {
 
                 </UpperPanel>
 
-                <CenterPanel>
+                <CenterPanel style={[
+                    centerPanelStyles.viewCenter,
+                    viewCenterAnimatedStyles(getStates()),
+                    viewCenterConditionalStyles(targetState)]}>
+
+                    {initialState === 'SORT' && 
+                        <Categories states={getStates().states} />}
+
+                    <LowerPanel style={[
+                        lowerPanelStyles.viewLower,
+                        viewLowerAnimatedStyles(getStates()),
+                        viewLowerConditionalStyles(targetState)]}>
+
+                        {(initialState === 'AUTH' || initialState === 'AUTH_INPUT') &&
+                            <AuthElements states={getStates().states} />}
+                        {(initialState === 'HOME'
+                            || initialState === 'HOME_INPUT'
+                            || initialState === 'QUERY') &&
+                            <>
+                                <PanelButtons states={getStates().states} />
+                                <QueriedHeadline states={getStates().states} />
+                                <LinkInput states={getStates().states} />
+                                <ExtraHeadlines states={getStates().states} />
+                            </>}
+
+                    </LowerPanel>
 
                 </CenterPanel>
-
-                <LowerPanel style={[
-                    lowerPanelStyles.viewLower,
-                    viewLowerAnimatedStyles(getStates()),
-                    viewLowerConditionalStyles(targetState)]}>
-
-                    {(initialState === 'AUTH' || initialState === 'AUTH_INPUT') &&
-                        <AuthElements states={getStates().states} />}
-                    {(initialState === 'HOME'
-                        || initialState === 'HOME_INPUT'
-                        || initialState === 'QUERY') &&
-                        <>
-                            <PanelButtons states={getStates().states} />
-                            <QueriedHeadline states={getStates().states} />
-                            <LinkInput states={getStates().states} />
-                            <ExtraHeadlines states={getStates().states} />
-                        </>}
-
-                </LowerPanel>
 
             </Animated.View>
             <StatusBar style="light" translucent={true} />

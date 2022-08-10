@@ -20,12 +20,12 @@ export const linkInputAnimatedStyles = (props: LSU.DisplayState) => {
 
     const borderColorValue = useDerivedValue(() => {
         switch (props.LinkInputMode) {
-            case 'ERROR':
-                return withTiming(0, { duration: SCU.DURATION });
             case 'SET_LINK':
                 return withTiming(1, { duration: SCU.DURATION });
             case 'SET_CATEGORY':
                 return withTiming(2, { duration: SCU.DURATION });
+            default:
+                return withTiming(0, { duration: SCU.DURATION });
         };
     }, [props]);
 

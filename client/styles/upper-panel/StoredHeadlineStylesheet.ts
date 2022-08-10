@@ -27,11 +27,8 @@ export const storedHeadlineStyles = StyleSheet.create({
         paddingHorizontal: '6%',
         justifyContent: 'center',
         flex: 0.97,
-        // backgroundColor: 'red'
     },
     viewImageContainer: {
-        // marginTop: '1%',
-        shadowColor: 'rgba(0, 0, 0, 0.9)',
         shadowOffset: { width: 10, height: 10 },
         shadowRadius: 5,
         elevation: 5,

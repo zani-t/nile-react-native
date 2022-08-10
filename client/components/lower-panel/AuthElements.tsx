@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Keyboard, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
+import * as SecureStore from 'expo-secure-store';
 import Animated from 'react-native-reanimated';
 import jwtDecode from 'jwt-decode';
 
@@ -23,12 +24,14 @@ const AuthElements: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) =
                 req_password = 'testpassword';
             };
             
-            // Get authentication tokens
-            // console.log({req_email, req_password})
+            // Get authentication tokens & add to storage
             const response = await axiosStatic.post('token/', {
                 username: req_email,
                 password: req_password,
             });
+            await SecureStore.setItemAsync('tokens', JSON.stringify(response.data));
+
+            // Set context
             authContext?.setAuthState({
                 user: jwtDecode(response.data.access),
                 authTokens: response.data,
@@ -40,7 +43,10 @@ const AuthElements: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) =
             closeKeyboardSequence('HOME');
         } catch (error) {
             console.log(`AuthElements.tsx signinSequence ${error}`);
-            // Set field to red [& display type of error]
+            /* props.states.setDisplayState({
+                ...LSU.AuthDisplayState,
+                AuthElementsMode: 'ERROR',
+            }); */
         };
     };
 

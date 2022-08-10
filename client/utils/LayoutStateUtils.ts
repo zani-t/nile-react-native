@@ -15,13 +15,14 @@ export interface Article {
 export type PanelState = 'SPLASH' | 'AUTH' | 'AUTH_INPUT' | 'QUERY' | 'HOME' | 'HOME_INPUT' | 'SORT';
 
 // All states from home page input
-export type InputState = 'SET_LINK' | 'SET_CATEGORY' | 'ERROR';
+export type InputState = 'SET_LOGIN' | 'SET_LINK' | 'SET_CATEGORY' | 'ERROR';
 
 // All components (showing/hidden)
 export type DisplayState = {
     SplashImage: boolean,
     HeaderLarge: boolean,
     AuthElements: boolean,
+    AuthElementsMode: InputState,
     HeaderSmall: boolean,
     StoredHeadline: boolean,
     QueryContainer: boolean,
@@ -168,12 +169,29 @@ LayoutState.set('QUERY', {
     },
 });
 
+LayoutState.set('SORT', {
+    container: {
+        color: SCU.COLORS.GREEN
+    },
+    upper: {
+        height: SCU.HEIGHT * 0.13,
+    },
+    center: {
+        height: SCU.HEIGHT * 0.87,
+    },
+    lower: {
+        height: SCU.HEIGHT * 0.55,
+        color: SCU.COLORS.WHITE,
+    },
+});
+
 // Component configurations
 // None showing
 export const HiddenDisplayState: DisplayState = {
     SplashImage: false,
     HeaderLarge: false,
     AuthElements: false,
+    AuthElementsMode: 'SET_LOGIN',
     HeaderSmall: false,
     StoredHeadline: false,
     QueryContainer: false,
@@ -232,4 +250,13 @@ export const QueryDisplayState: DisplayState = {
     PanelButtons: true,
     LinkInput: true,
     ExtraHeadlines: true,
+};
+
+// PanelState === 'Sort'
+export const SortDisplayState: DisplayState = {
+    ...HiddenDisplayState,
+    HeaderSmall: true,
+    Categories: true,
+    PanelButtons: true,
+    LinkInput: true,
 };
