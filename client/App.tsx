@@ -3,154 +3,118 @@ import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import Animated from 'react-native-reanimated';
 
-import {
-    app_styles,
-    view_container_animated_styles,
-    view_upper_animated_styles,
-    view_upper_conditional_styles,
-    view_lower_animated_styles,
-    view_lower_conditional_styles,
-} from './styles/app-stylesheet';
+import { AuthProvider } from './context/AuthContext';
+import * as LSU from './utils/LayoutStateUtils';
+
+import { containerStyles, viewContainerAnimatedStyles } from './styles/ContainerStylesheet';
 
 import UpperPanel from './components/upper-panel/UpperPanel';
-import SplashImage from './components/SplashImage';
+import { upperPanelStyles,
+    viewUpperAnimatedStyles,
+    viewUpperConditionalStyles } from './styles/UpperPanelStylesheet';
+import SplashImage from './components/upper-panel/SplashImage';
 import HeaderLarge from './components/upper-panel/HeaderLarge';
 import HeaderSmall from './components/upper-panel/HeaderSmall';
+import StoredHeadline from './components/upper-panel/StoredHeadline';
 
-import LowerPanel from './components/lower-panel/LowerPanel';
+import CenterPanel from './components/upper-panel/UpperPanel';
+import { centerPanelStyles, viewCenterAnimatedStyles, viewCenterConditionalStyles } from './styles/CenterPanelStylesheet';
+import Categories from './components/center-panel/Categories';
+
+import LowerPanel from './components/upper-panel/UpperPanel';
+import { lowerPanelStyles,
+    viewLowerAnimatedStyles,
+    viewLowerConditionalStyles } from './styles/LowerPanelStylesheet';
 import AuthElements from './components/lower-panel/AuthElements';
+import QueriedHeadline from './components/lower-panel/QueriedHeadline';
 import PanelButtons from './components/lower-panel/PanelButtons';
 import LinkInput from './components/lower-panel/LinkInput';
-import { AuthProvider } from './context/AuthContext';
-
-export type AppState = 'SPLASH' | 'AUTH' | 'HOME' | 'CONFIRM' | 'SORT';
-export type KeyboardState = 'OFF' | 'TRANSITION' | 'AUTH' | 'LINK'
-export type LinkInputDisplay = 'DEFAULT' | 'BAD_LINK' | 'CONFIRM'
-export type AppDisplay = {
-    HeaderLarge: boolean;
-    HeaderSmall: boolean;
-    AuthElements: boolean,
-    PanelButtons: boolean,
-    LinkInput: boolean,
-    LinkInputType: LinkInputDisplay;
-}
+import ExtraHeadlines from "./components/lower-panel/ExtraHeadlines";
 
 export default function App() {
 
-    const [appState, setAppState] = useState<AppState>('SPLASH');
-    const [keyboardState, setKeyboardState] = useState<KeyboardState>('OFF');
-    const [appDisplay, setAppDisplay] = useState<AppDisplay>({
-        HeaderLarge: false,
-        HeaderSmall: false,
-        AuthElements: false,
-        PanelButtons: false,
-        LinkInput: false,
-        LinkInputType: 'DEFAULT',
-    });
+    const [initialState, setInitialState] = useState<LSU.PanelState>('SPLASH');
+    const [targetState, setTargetState] = useState<LSU.PanelState>('SPLASH');
+    const [displayState, setDisplayState] = useState<LSU.DisplayState>(LSU.SplashDisplayState);
+    const [articles, setArticles] = useState<LSU.Article[]>([]);
+    const [queriedArticle, setQueriedArticle] = useState<LSU.Article | null>(null);
+
+    const getStates = () => {
+        return {
+            states: {
+                initialState: initialState,
+                targetState: targetState,
+                displayState: displayState,
+                articles: articles,
+                queriedArticle: queriedArticle,
+                setInitialState: setInitialState,
+                setTargetState: setTargetState,
+                setDisplayState: setDisplayState,
+                setArticles: setArticles,
+                setQueriedArticle: setQueriedArticle,
+            },
+        };
+    };
 
     return (
+        <AuthProvider>
 
-        <AuthProvider
-            appStateController={setAppState}
-            appDisplayController={setAppDisplay}
-            keyboardStateController={setKeyboardState} >
-            <Animated.View
-                style={[app_styles.view_container,
-                view_container_animated_styles({ appState: appState })]}>
-                <UpperPanel
-                    style={[app_styles.view_panel_upper,
-                    view_upper_animated_styles({
-                        appState: appState,
-                        keyboardState: keyboardState,
-                    }),
-                    view_upper_conditional_styles({ appState: appState })]}>
+            <Animated.View style={[
+                containerStyles.viewContainer,
+                viewContainerAnimatedStyles(getStates())]}>
 
-                    {appState === 'SPLASH' &&
-                        <SplashImage appStateControl={setAppState} />}
-                    {appState === 'AUTH' &&
-                        <HeaderLarge appDisplayControl={appDisplay} />}
-                    {appState === 'HOME' &&
-                        <HeaderSmall appDisplayControl={appDisplay} />}
+                <UpperPanel style={[
+                    upperPanelStyles.viewUpper,
+                    viewUpperAnimatedStyles(getStates()),
+                    viewUpperConditionalStyles(targetState)]}>
+
+                    {initialState === 'SPLASH' &&
+                        <SplashImage states={getStates().states} />}
+                    {initialState === 'AUTH' &&
+                        <HeaderLarge states={getStates().states} />}
+                    {(initialState === 'HOME'
+                        || initialState === 'HOME_INPUT'
+                        || initialState === 'QUERY') &&
+                        <>
+                            <HeaderSmall states={getStates().states} />
+                            <StoredHeadline states={getStates().states} />
+                        </>}
 
                 </UpperPanel>
 
-                {
-                    // panelbuttons calls appdisplaycontroller to display components
-                }
+                <CenterPanel style={[
+                    centerPanelStyles.viewCenter,
+                    viewCenterAnimatedStyles(getStates()),
+                    viewCenterConditionalStyles(targetState)]}>
 
-                <LowerPanel
-                    style={[app_styles.view_panel_lower,
-                    view_lower_animated_styles({
-                        appState: appState,
-                        keyboardState: keyboardState,
-                    }),
-                    view_lower_conditional_styles({ appState: appState })]}>
+                    {initialState === 'SORT' && 
+                        <Categories states={getStates().states} />}
 
-                    {appState === 'AUTH' &&
-                        <AuthElements
-                            appStateController={setAppState}
-                            appDisplayControl={appDisplay}
-                            appDisplayController={setAppDisplay}
-                            keyboardStateController={setKeyboardState} />}
-                    {appState === 'HOME' &&
-                        <>
-                            <PanelButtons
-                                appStateController={setAppState}
-                                appDisplayControl={appDisplay}
-                                appDisplayController={setAppDisplay} />
-                            <LinkInput
-                                appStateController={setAppState}
-                                appDisplayControl={appDisplay}
-                                appDisplayController={setAppDisplay} />
-                        </>}
+                    <LowerPanel style={[
+                        lowerPanelStyles.viewLower,
+                        viewLowerAnimatedStyles(getStates()),
+                        viewLowerConditionalStyles(targetState)]}>
 
-                </LowerPanel>
-                <StatusBar style="light" />
+                        {(initialState === 'AUTH' || initialState === 'AUTH_INPUT') &&
+                            <AuthElements states={getStates().states} />}
+                        {(initialState === 'HOME'
+                            || initialState === 'HOME_INPUT'
+                            || initialState === 'QUERY') &&
+                            <>
+                                <PanelButtons states={getStates().states} />
+                                <QueriedHeadline states={getStates().states} />
+                                <LinkInput states={getStates().states} />
+                                <ExtraHeadlines states={getStates().states} />
+                            </>}
+
+                    </LowerPanel>
+
+                </CenterPanel>
+
             </Animated.View>
-        </AuthProvider>
+            <StatusBar style="light" translucent={true} />
 
+        </AuthProvider>
     );
 
 };
-
-
-
-
-
-
-
-
-
-
-
-/*
- * top panel - splash image, yw large, yw small, stored headline
- * center panel - category list
- * bottom panel - auth input, control buttons, queried headline, text input, extra articles, all articles
- */
-
-// animation method - fade elements, change state, show new elements
-
-// permanent - container, above panel
-
-// splash - container blue, splash image
-// auth - container green, panel up, panel green, header, inputs
-// home - panel down, panel white, stored article, panel buttons, enter link, other articles
-// confirm - panel up, queried article
-// categories - panel down, inner panel up, categories, articles
-
-// all components
-// *splash image
-
-// *yw header 1
-// *auth elements (email, password, buttons* - contact mongo)
-
-// *yw header 2
-// stored headline (photo, text)* - go to web
-// panel buttons* - refresh[/contact mongo], log out, trigger categories
-// txt input* - contact django & trigger confirm stg 1 // set category, contact mongo, trigger home
-// extra articles* - go to web
-// queried headline (photo, text)* - trigger confirm stg 2, change txt input properties
-// category list
-// article list (text*) - [rearrange/renamea articles/partially reload list]
-// home button - trigger home, contact mongo

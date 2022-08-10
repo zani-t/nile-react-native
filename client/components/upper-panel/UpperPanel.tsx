@@ -4,7 +4,7 @@ import React from 'react';
 import Animated from 'react-native-reanimated';
 
 interface UpperPanelProps {
-    style: ViewStyle[];
+    style?: ViewStyle[];
     children: React.ReactNode;
 };
 

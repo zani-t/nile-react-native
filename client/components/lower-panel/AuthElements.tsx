@@ -1,118 +1,135 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Keyboard, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
+import * as SecureStore from 'expo-secure-store';
 import Animated from 'react-native-reanimated';
 import jwtDecode from 'jwt-decode';
 
-import { AppState, KeyboardState, AppDisplay } from '../../App';
+import * as LSU from './../../utils/LayoutStateUtils';
+import * as SCU from './../../utils/StyleConstUtils';
+import axiosStatic from '../../utils/AxiosStatic';
 import { AuthContext } from '../../context/AuthContext';
-import { AxiosStatic } from '../../context/AxiosContext';
-import { auth_styles, auth_animated_styles } from '../../styles/auth-stylesheet'
+import { authElementsAnimatedStyles, authElementsStyles } from '../../styles/lower-panel/AuthElementsStylesheet';
 
-interface AuthElementComponentProps {
-    appStateController: React.Dispatch<React.SetStateAction<AppState>>;
-    appDisplayControl: AppDisplay;
-    appDisplayController: React.Dispatch<React.SetStateAction<AppDisplay>>;
-    keyboardStateController: React.Dispatch<React.SetStateAction<KeyboardState>>;
-};
-
-const AuthElements: React.FC<AuthElementComponentProps> = (props: AuthElementComponentProps) => {
+const AuthElements: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) => {
 
     const authContext = useContext(AuthContext);
-    const [email, set_email] = useState('');
-    const [password, set_password] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-    const setAppDisplay = async (header_setting: boolean, auth_setting: boolean) => {
-        props.appDisplayController({
-            ...props.appDisplayControl,
-            HeaderLarge: header_setting,
-            AuthElements: auth_setting,
-        });
-    };
-
-    useEffect(() => {
-        async function openingSequence() {
-            await new Promise(resolve => setTimeout(resolve, 500));
-            setAppDisplay(true, true);
-        }
-        openingSequence();
-
-        const keyboardListener = Keyboard.addListener("keyboardDidHide", async () => {
-            setAppDisplay(true, true);
-            Keyboard.dismiss();
-            props.keyboardStateController('TRANSITION');
-            await new Promise(resolve => setTimeout(resolve, 750));
-            props.keyboardStateController('OFF');
-        });
-        return () => { keyboardListener.remove(); };
-    }, []);
-
-    const signInSequence = async () => {
+    const signInSequence = async (req_email: string, req_password: string) => {
         try {
-            const response = await AxiosStatic.post('token/', {
-                username: 'zani',
-                password: 'adminpassword',
+            if (email === '' && password === '') {
+                req_email = 'testuser';
+                req_password = 'testpassword';
+            };
+            
+            // Get authentication tokens & add to storage
+            const response = await axiosStatic.post('token/', {
+                username: req_email,
+                password: req_password,
             });
+            await SecureStore.setItemAsync('tokens', JSON.stringify(response.data));
+
+            // Set context
             authContext?.setAuthState({
                 user: jwtDecode(response.data.access),
                 authTokens: response.data,
             });
 
-            props.keyboardStateController('OFF');
-            setAppDisplay(false, false);
-            await new Promise(resolve => setTimeout(resolve, 500));
-            props.appStateController('HOME');
-        } catch (error: any) {
-            console.log('Login Failed', error);
+            // Hide elements, close 
+            props.states.setDisplayState(LSU.HiddenDisplayState);
+            await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
+            closeKeyboardSequence('HOME');
+        } catch (error) {
+            console.log(`AuthElements.tsx signinSequence ${error}`);
+            /* props.states.setDisplayState({
+                ...LSU.AuthDisplayState,
+                AuthElementsMode: 'ERROR',
+            }); */
+        };
+    };
+
+    const registerSequence = async () => {
+        try {
+            // Create user
+            await axiosStatic.post('register/', {
+                username: email,
+                password: password,
+            });
+            Keyboard.dismiss();
+            signInSequence(email, password);
+        } catch (error) {
+            console.log(`AuthElements.tsx registerSequence ${error}`);
+            // Set field to red [& display type of error]
         }
+    }
+
+    // On opening keyboard: Hide header, set target state to AuthInput
+    const openKeyboardSequence = async () => {
+        props.states.setDisplayState(LSU.AuthInputDisplayState);
+        props.states.setTargetState('AUTH_INPUT');
+        await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
+        props.states.setInitialState('AUTH_INPUT');
     };
 
-    const registerSequence = async () => { };
+    // On closing keyboard: Set target to auth, hide keyboard,
+    // ...set initial (allow header to display), display header
+    const closeKeyboardSequence = async (targetState: LSU.PanelState) => {
+        // Hide & transition
+        Keyboard.dismiss();
+        props.states.setTargetState(targetState);
+        await new Promise(resolve => setTimeout(resolve, SCU.DURATION));
 
-    const setKeyboardState = async (keyboardState: KeyboardState) => {
-        props.appDisplayController(keyboardState === 'AUTH' ? {
-            ...props.appDisplayControl,
-            HeaderLarge: false,
-            AuthElements: true,
-        } : {
-            ...props.appDisplayControl,
-            HeaderLarge: true,
-            AuthElements: true,
+        props.states.setInitialState(targetState);
+        props.states.setDisplayState(LSU.AuthDisplayState);
+    };
+
+    useEffect(() => {
+        async function openingSequence() {
+            props.states.setDisplayState(LSU.AuthDisplayState);
+        };
+        openingSequence();
+        const keyboardListener = Keyboard.addListener("keyboardDidHide", async () => {
+            closeKeyboardSequence(props.states.targetState);
         });
-        props.keyboardStateController(keyboardState);
-    };
+        return () => { keyboardListener.remove(); };
+    }, []);
 
     return (
-        <Animated.View
-            style={[auth_styles.view_auth_content,
-            auth_animated_styles({ componentDisplayed: props.appDisplayControl.AuthElements })]}>
+        <Animated.View style={[
+            authElementsStyles.viewAuthContent,
+            authElementsAnimatedStyles(props.states.displayState)]}>
+
             <TextInput
-                style={auth_styles.text_input_auth}
-                autoCapitalize="none"
-                keyboardType="email-address"
-                placeholderTextColor='#c7d8d4'
-                placeholder=" Email . . ."
-                onFocus={() => setKeyboardState('AUTH')}
-                onChangeText={current_text => set_email(current_text)}
+                style={authElementsStyles.textInputAuth}
+                autoCapitalize='none'
+                keyboardType='email-address'
+                placeholderTextColor={SCU.COLORS.LIGHT_GREEN}
+                placeholder=' Email . . .'
+                onFocus={() => openKeyboardSequence()}
+                onChangeText={current_text => setEmail(current_text)}
                 value={email} />
             <TextInput
-                style={auth_styles.text_input_auth}
+                style={authElementsStyles.textInputAuth}
                 autoCapitalize="none"
                 placeholderTextColor='#c7d8d4'
                 placeholder=" Password . . ."
-                onFocus={() => setKeyboardState('AUTH')}
-                onChangeText={current_text => set_password(current_text)}
+                onFocus={() => openKeyboardSequence()}
+                onChangeText={current_text => setPassword(current_text)}
                 value={password}
-                secureTextEntry={true} />
-            <View style={auth_styles.view_button_container}>
-                <TouchableOpacity onPress={signInSequence}>
-                    <Text style={auth_styles.text_button}>SIGN IN </Text>
+                secureTextEntry />
+
+            <View style={authElementsStyles.viewButtonContainer}>
+                <TouchableOpacity onPress={() => signInSequence(email, password)}>
+                    <Text style={authElementsStyles.textButton}>SIGN IN </Text>
                 </TouchableOpacity>
-                <Text style={auth_styles.text_button}> / </Text>
+                <Text style={authElementsStyles.textButton}> / </Text>
                 <TouchableOpacity onPress={registerSequence}>
-                    <Text style={auth_styles.text_button}> REGISTER</Text>
+                    <Text style={authElementsStyles.textButton}> REGISTER</Text>
                 </TouchableOpacity>
             </View>
+
         </Animated.View>
     );
 

@@ -1,12 +1,8 @@
-import React, { createContext, useState } from "react";
-
-import { AppState, KeyboardState, AppDisplay } from '../App';
+import React, { createContext, useState } from 'react';
 
 interface AuthProviderProps {
     children: React.ReactNode;
-    appStateController: React.Dispatch<React.SetStateAction<AppState>>;
-    appDisplayController: React.Dispatch<React.SetStateAction<AppDisplay>>;
-    keyboardStateController: React.Dispatch<React.SetStateAction<KeyboardState>>;
+    states?: any;
 };
 
 interface AuthStateProps {
@@ -27,15 +23,6 @@ export const AuthProvider = (props: AuthProviderProps) => {
         user: null,
         authTokens: null,
     });
-
-    const logoutUser = () => {
-        setAuthState({
-            user: null,
-            authTokens: null,
-        });
-        // Remove authTokens from keychain storage
-        // Navigate to auth
-    };
 
     // Display splash when loading
     return (

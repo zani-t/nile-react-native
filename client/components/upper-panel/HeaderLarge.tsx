@@ -1,22 +1,19 @@
-import React from "react";
+import React, { useEffect } from 'react';
 
-import Animated from "react-native-reanimated";
+import Animated from 'react-native-reanimated';
+import { headerLargeAnimatedStyles, headerLargeStyles } from '../../styles/upper-panel/HeaderLargeStylesheet';
 
-import { AppDisplay } from '../../App';
-import { auth_styles, auth_animated_styles } from '../../styles/auth-stylesheet'
+import * as LSU from './../../utils/LayoutStateUtils';
 
-interface HeaderLargeComponentProps {
-    appDisplayControl: AppDisplay;
-};
-
-const HeaderLarge: React.FC<HeaderLargeComponentProps> = (props: HeaderLargeComponentProps) => {
+const HeaderLarge: React.FC<LSU.ComponentProps> = (props: LSU.ComponentProps) => {
 
     return (
         <Animated.Text
-            style={[auth_styles.text_header,
-                auth_animated_styles({ componentDisplayed: props.appDisplayControl.HeaderLarge })]}>
-                    YW</Animated.Text>
+            style={[headerLargeStyles.textHeaderLarge,
+                headerLargeAnimatedStyles(props.states.displayState)]}>
+            YW</Animated.Text>
     );
+
 };
 
 export default HeaderLarge;
